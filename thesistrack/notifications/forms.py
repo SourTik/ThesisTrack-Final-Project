@@ -1,0 +1,1 @@
+"""Notification app currently does not require custom forms."""

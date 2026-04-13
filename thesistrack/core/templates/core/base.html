@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThesisTrack</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f4f6fa; color: #1a1a1a; }
+        .layout { display: flex; min-height: 100vh; }
+        .sidebar { width: 230px; background: #243447; color: #fff; padding: 20px; }
+        .sidebar a { color: #fff; text-decoration: none; display: block; margin: 8px 0; }
+        .main { flex: 1; }
+        .navbar { background: #fff; border-bottom: 1px solid #ddd; padding: 14px 24px; }
+        .content { padding: 24px; }
+        .messages { list-style: none; padding: 0; }
+        .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>ThesisTrack</h2>
+            <a href="{% url 'dashboard:home' %}">Dashboard</a>
+            <a href="{% url 'projects:project-list' %}">Projects</a>
+            <a href="{% url 'attendance:attendance-list' %}">Attendance</a>
+            <a href="{% url 'notifications:list' %}">Notifications</a>
+            <a href="{% url 'core:layout-preview' %}">Layout Preview</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Login</a>
+            {% endif %}
+        </aside>
+        <div class="main">
+            <nav class="navbar">
+                {% if user.is_authenticated %}
+                    Logged in as {{ user.username }} ({{ user.role }})
+                {% else %}
+                    Welcome to ThesisTrack
+                {% endif %}
+            </nav>
+            <div class="content">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="card">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

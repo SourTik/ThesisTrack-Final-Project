@@ -1,0 +1,1 @@
+"""Core app currently does not require custom forms."""

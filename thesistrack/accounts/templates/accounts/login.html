@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="card">
+    <h1>Login</h1>
+    <p>Users are created by admin only. Registration is disabled.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sign In</button>
+    </form>
+</div>
+{% endblock %}

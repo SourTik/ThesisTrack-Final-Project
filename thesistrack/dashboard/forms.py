@@ -1,0 +1,1 @@
+"""Dashboard app currently does not require custom forms."""
