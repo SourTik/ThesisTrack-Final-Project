@@ -1,19 +1,45 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="card">
-    <h1>Projects</h1>
-    <a href="{% url 'projects:submit-project' %}">Submit New Proposal</a>
-    <ul>
+<div class="space-y-8">
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-white">Your Projects</h1>
+            <p class="text-slate-400 mt-1">Manage and track your research progress.</p>
+        </div>
+        <a href="{% url 'projects:submit-project' %}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
+            + Submit New Proposal
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for project in projects %}
-            <li>
-                {{ project.title }} - {{ project.status }}
-                <a href="{% url 'projects:submit-document' project.id %}">Submit Doc</a>
-                <a href="{% url 'projects:approve-project' project.id %}">Approve</a>
-            </li>
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl hover:border-indigo-500/50 transition-all group relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-indigo-500/5 blur-2xl rounded-full"></div>
+            
+            <span class="text-[10px] font-bold tracking-widest uppercase text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                {{ project.status|default:"Pending" }}
+            </span>
+            
+            <h3 class="text-xl font-bold text-white mt-4 group-hover:text-indigo-400 transition-colors">{{ project.title }}</h3>
+            <p class="text-slate-400 mt-2 text-sm line-clamp-2">{{ project.abstract }}</p>
+            
+            <div class="mt-6 pt-6 border-t border-slate-800 flex justify-between items-center">
+                <span class="text-xs text-slate-500 uppercase font-semibold">Supervisor: {{ project.supervisor }}</span>
+                <a href="#" class="text-indigo-400 hover:text-white text-sm font-bold">View Details →</a>
+            </div>
+        </div>
         {% empty %}
-            <li>No projects available.</li>
+        <div class="col-span-full py-20 bg-slate-900/50 border border-dashed border-slate-800 rounded-3xl text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 mb-4 text-slate-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white">No projects available</h3>
+            <p class="text-slate-500 mt-2">Start your journey by submitting a new proposal.</p>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}
