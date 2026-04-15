@@ -1,7 +1,9 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from accounts.models import User
+from core.decorators import role_required
 
-@login_required
+
+@role_required(User.STUDENT, User.SUPERVISOR, User.ADMIN)
 def layout_preview(request):
-	return render(request, 'core/layout_preview.html')
+    return render(request, 'core/layout_preview.html')

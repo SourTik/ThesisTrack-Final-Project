@@ -1,42 +1,32 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, render
 
-
-def _role_guard(request, role):
-	if request.user.role != role:
-		return HttpResponseForbidden('You are not authorized to access this dashboard.')
-	return None
+from accounts.models import User
+from core.decorators import role_required
 
 
 @login_required
 def home(request):
-	if request.user.role == 'SUPERVISOR':
-		return redirect('dashboard:supervisor-dashboard')
-	if request.user.role == 'ADMIN':
-		return redirect('dashboard:admin-dashboard')
-	return redirect('dashboard:student-dashboard')
+    if request.user.role == User.SUPERVISOR:
+        return redirect('dashboard:supervisor-dashboard')
+    if request.user.role == User.ADMIN or request.user.is_superuser:
+        return redirect('dashboard:admin-dashboard')
+    if request.user.role == User.STUDENT:
+        return redirect('dashboard:student-dashboard')
+    raise PermissionDenied('Unknown role for this user.')
 
 
-@login_required
+@role_required(User.STUDENT)
 def student_dashboard(request):
-	blocked = _role_guard(request, 'STUDENT')
-	if blocked:
-		return blocked
-	return render(request, 'dashboard/student_dashboard.html')
+    return render(request, 'dashboard/student_dashboard.html')
 
 
-@login_required
+@role_required(User.SUPERVISOR)
 def supervisor_dashboard(request):
-	blocked = _role_guard(request, 'SUPERVISOR')
-	if blocked:
-		return blocked
-	return render(request, 'dashboard/supervisor_dashboard.html')
+    return render(request, 'dashboard/supervisor_dashboard.html')
 
 
-@login_required
+@role_required(User.ADMIN)
 def admin_dashboard(request):
-	blocked = _role_guard(request, 'ADMIN')
-	if blocked:
-		return blocked
-	return render(request, 'dashboard/admin_dashboard.html')
+    return render(request, 'dashboard/admin_dashboard.html')

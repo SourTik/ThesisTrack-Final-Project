@@ -29,6 +29,7 @@ class Project(models.Model):
 		related_name='supervised_projects',
 	)
 	status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+	deadline = models.DateField(null=True, blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 
@@ -37,33 +38,31 @@ class Project(models.Model):
 
 
 class Submission(models.Model):
-	project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='submissions')
-	uploaded_by = models.ForeignKey(
-		settings.AUTH_USER_MODEL,
-		on_delete=models.CASCADE,
-		related_name='submissions',
-	)
-	document = models.FileField(
-		upload_to='submissions/',
-		validators=[FileExtensionValidator(allowed_extensions=['docx'])],
-	)
-	submitted_at = models.DateTimeField(auto_now_add=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='submissions')
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='submissions',
+    )
+    document = models.FileField(
+        upload_to='submissions/',
+        validators=[FileExtensionValidator(allowed_extensions=['docx'])],
+    )
+    submitted_at = models.DateTimeField(auto_now_add=True)
 
-	def __str__(self):
-		return f"Submission #{self.pk} - {self.project.title}"
+    def __str__(self):
+        return f"Submission #{self.pk} - {self.project.title}"
 
 
 class Feedback(models.Model):
-	submission = models.ForeignKey(Submission, on_delete=models.CASCADE, related_name='feedback_items')
-	reviewer = models.ForeignKey(
-		settings.AUTH_USER_MODEL,
-		on_delete=models.CASCADE,
-		related_name='given_feedback',
-	)
-	comments = models.TextField()
-	created_at = models.DateTimeField(auto_now_add=True)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE, related_name='feedback_items')
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='given_feedback',
+    )
+    comments = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-	def __str__(self):
-		return f"Feedback #{self.pk} on {self.submission.project.title}"
-
-# Create your models here.
+    def __str__(self):
+        return f"Feedback #{self.pk} on {self.submission.project.title}"
