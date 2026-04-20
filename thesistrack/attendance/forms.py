@@ -6,4 +6,8 @@ from .models import Attendance
 class AttendanceMarkForm(forms.ModelForm):
     class Meta:
         model = Attendance
-        fields = ['student', 'date', 'is_present', 'notes']
+        fields = ['student', 'project', 'date', 'status', 'notes']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'notes': forms.Textarea(attrs={'rows': 3}),
+        }

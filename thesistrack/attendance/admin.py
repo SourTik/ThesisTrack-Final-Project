@@ -5,8 +5,7 @@ from .models import Attendance
 
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
-	list_display = ('student', 'supervisor', 'date', 'is_present')
-	list_filter = ('is_present', 'date')
-	search_fields = ('student__username', 'supervisor__username')
-
-# Register your models here.
+    list_display = ('date', 'student', 'supervisor', 'project', 'status', 'created_at')
+    list_filter = ('status', 'date', 'supervisor', 'project')
+    search_fields = ('student__username', 'supervisor__username', 'project__title', 'notes')
+    date_hierarchy = 'date'
