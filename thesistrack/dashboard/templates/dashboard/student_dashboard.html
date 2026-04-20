@@ -1,8 +1,33 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="card">
-    <h1>Student Dashboard</h1>
-    <p>Track proposal status, submissions, and feedback.</p>
+<div class="space-y-8">
+    <div>
+        <h1 class="text-3xl font-bold text-white">Student Dashboard</h1>
+        <p class="text-slate-400 mt-1">Track your group progress and project milestones.</p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Group</p>
+            <p class="mt-2 text-2xl font-bold text-white">{% if group %}{{ group.name }}{% else %}No group{% endif %}</p>
+            <p class="mt-2 text-sm text-slate-400">Members: {% if group %}{{ group.member_count }}{% else %}0{% endif %}</p>
+        </div>
+        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Project</p>
+            <p class="mt-2 text-2xl font-bold text-white">{% if project %}{{ project.title }}{% else %}Not submitted{% endif %}</p>
+            <p class="mt-2 text-sm text-slate-400">Status: {% if project %}{{ project.get_status_display }}{% else %}Pending{% endif %}</p>
+        </div>
+        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Attendance</p>
+            <p class="mt-2 text-2xl font-bold text-white">{{ attendance_count }}</p>
+            <p class="mt-2 text-sm text-slate-400">Records available</p>
+        </div>
+        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Notifications</p>
+            <p class="mt-2 text-2xl font-bold text-white">{{ unread_notifications }}</p>
+            <p class="mt-2 text-sm text-slate-400">Unread alerts</p>
+        </div>
+    </div>
 </div>
 {% endblock %}

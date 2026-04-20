@@ -1,172 +1,96 @@
-import os
 from django import forms
+from django.db.models import Q
 from accounts.models import User
-from .models import Feedback, Project, Submission
 
-from django import forms
-from accounts.models import User, SupervisorStudent # Import the assignment model
-from .models import Project
+from .models import Feedback, Group, Project, Submission
 
-from django import forms
-from accounts.models import User, SupervisorStudent
-from .models import Project
+
+class GroupForm(forms.ModelForm):
+    members = forms.ModelMultipleChoiceField(
+        queryset=User.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+    )
+
+    class Meta:
+        model = Group
+        fields = ['name', 'members']
+
+    def __init__(self, *args, **kwargs):
+        self.request_user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        base_students = User.objects.filter(role=User.STUDENT).distinct()
+        if self.instance.pk:
+            current_member_ids = self.instance.members.values_list('id', flat=True)
+            self.fields['members'].queryset = base_students.filter(
+                Q(project_groups__isnull=True) | Q(id__in=current_member_ids)
+            ).distinct()
+        else:
+            self.fields['members'].queryset = base_students.filter(project_groups__isnull=True)
+
+        if self.request_user and self.request_user.role == User.STUDENT:
+            current_selection = self.initial.get('members') or []
+            if self.request_user.pk not in [m.pk if hasattr(m, 'pk') else m for m in current_selection]:
+                self.initial['members'] = list(current_selection) + [self.request_user.pk]
+
+    def clean_members(self):
+        members = list(self.cleaned_data.get('members', []))
+        if self.request_user and self.request_user.role == User.STUDENT and self.request_user not in members:
+            members.append(self.request_user)
+
+        member_count = len(members)
+        if member_count < 4 or member_count > 6:
+            raise forms.ValidationError('Group size must be between 4 and 6 students.')
+
+        for user in members:
+            if user.role != User.STUDENT:
+                raise forms.ValidationError(f'{user.username} is not a STUDENT user.')
+
+            already_grouped = Group.objects.filter(members=user)
+            if self.instance.pk:
+                already_grouped = already_grouped.exclude(pk=self.instance.pk)
+            if already_grouped.exists():
+                raise forms.ValidationError(f'{user.username} already belongs to another group.')
+
+        return members
+
+    def save(self, commit=True):
+        members = self.cleaned_data['members']
+        instance = super().save(commit=False)
+        instance._members_for_validation_cache = members
+        if commit:
+            instance.save()
+            instance.members.set(members)
+            instance._members_for_validation_cache = list(instance.members.all())
+            instance.full_clean()
+        return instance
+
 
 class ProjectForm(forms.ModelForm):
-    supervisor = forms.ModelChoiceField(
-        queryset=User.objects.none(),
-        widget=forms.Select(attrs={
-            'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500'
-        }),
-        required=True,
-        label="Select your assigned supervisor"
-    )
+    class Meta:
+        model = Project
+        fields = ['title', 'abstract']
+
+
+class SupervisorAssignmentForm(forms.ModelForm):
+    supervisor = forms.ModelChoiceField(queryset=User.objects.filter(role=User.SUPERVISOR))
 
     class Meta:
         model = Project
-        fields = ['title', 'abstract', 'supervisor']
-
-    def __init__(self, *args, **kwargs):
-        # Grab the user passed from the view
-        user = kwargs.pop('user', None)
-        super(ProjectForm, self).__init__(*args, **kwargs)
-        
-        if user:
-            # 1. Find all supervisor IDs assigned to THIS student in the admin panel
-            assigned_ids = SupervisorStudent.objects.filter(
-                student=user
-            ).values_list('supervisor_id', flat=True)
-            
-            # 2. Update the dropdown to show those specific users
-            # Note: We removed the .filter(role='SUPERVISOR') to prevent role-name mismatches
-            self.fields['supervisor'].queryset = User.objects.filter(id__in=assigned_ids)
-
-            # 3. If the list is still empty, show ALL users for now so you can test
-            if not self.fields['supervisor'].queryset.exists():
-                self.fields['supervisor'].queryset = User.objects.all()
-    supervisor = forms.ModelChoiceField(
-        queryset=User.objects.none(),
-        widget=forms.Select(attrs={
-            'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500'
-        }),
-        required=True,
-        empty_label="Select your assigned supervisor"
-    )
-
-    class Meta:
-        model = Project
-        fields = ['title', 'abstract', 'supervisor']
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super(ProjectForm, self).__init__(*args, **kwargs)
-        
-        if user:
-            # Check for assignments
-            assignments = SupervisorStudent.objects.filter(student=user)
-            
-            # DEBUG: Look at your terminal/console when you refresh the page
-            print(f"DEBUG: Found {assignments.count()} assignments for user {user.username}")
-            
-            if assignments.exists():
-                assigned_ids = assignments.values_list('supervisor_id', flat=True)
-                self.fields['supervisor'].queryset = User.objects.filter(id__in=assigned_ids)
-            else:
-                # Fallback: If no assignment exists, show all supervisors so you aren't blocked
-                # You can remove this fallback once your database is 100% correct
-                self.fields['supervisor'].queryset = User.objects.filter(role='SUPERVISOR')
-    supervisor = forms.ModelChoiceField(
-        queryset=User.objects.none(), # Start with an empty list
-        widget=forms.Select(attrs={
-            'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500'
-        }),
-        required=True,
-        label="Your Assigned Supervisor"
-    )
-
-    class Meta:
-        model = Project
-        fields = ['title', 'abstract', 'supervisor']
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super(ProjectForm, self).__init__(*args, **kwargs)
-        
-        if user:
-            # Filter the dropdown to only show the supervisor assigned to this student
-            assigned_supervisors = SupervisorStudent.objects.filter(student=user).values_list('supervisor_id', flat=True)
-            self.fields['supervisor'].queryset = User.objects.filter(id__in=assigned_supervisors)
-    supervisor = forms.ModelChoiceField(
-        queryset=User.objects.filter(role='SUPERVISOR'),
-        widget=forms.Select(attrs={
-            'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500'
-        }),
-        required=True,
-        label="Select a Supervisor"
-    )
-
-    class Meta:
-        model = Project
-        fields = ['title', 'abstract', 'supervisor']
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl mb-4'}),
-            'abstract': forms.Textarea(attrs={'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl mb-4', 'rows': 4}),
-        }
-
-    # This is the critical part to fix the TypeError
-    def __init__(self, *args, **kwargs):
-        # We "pop" the user out of the arguments so BaseModelForm doesn't see it
-        self.user = kwargs.pop('user', None)
-        super(ProjectForm, self).__init__(*args, **kwargs)
-    # This ensures the student can only pick users who are actual Supervisors
-    supervisor = forms.ModelChoiceField(
-        queryset=User.objects.filter(role='SUPERVISOR'),
-        widget=forms.Select(attrs={
-            'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition'
-        }),
-        required=True,
-        label="Select a Supervisor"
-    )
-
-    class Meta:
-        model = Project
-        fields = ['title', 'abstract', 'supervisor']
-        widgets = {
-            'title': forms.TextInput(attrs={
-                'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition',
-                'placeholder': 'Enter project title'
-            }),
-            'abstract': forms.Textarea(attrs={
-                'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition',
-                'placeholder': 'Enter project abstract',
-                'rows': 4
-            }),
-        }
+        fields = ['supervisor']
 
 class SubmissionForm(forms.ModelForm):
     class Meta:
         model = Submission
-        fields = ['document']
-        widgets = {
-            'document': forms.FileInput(attrs={
-                'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl'
-            }),
-        }
+        fields = ['file']
 
-    def clean_document(self):
-        document = self.cleaned_data['document']
-        extension = os.path.splitext(document.name)[1].lower()
-        if extension != '.docx':
+    def clean_file(self):
+        uploaded_file = self.cleaned_data['file']
+        if uploaded_file and not uploaded_file.name.lower().endswith('.docx'):
             raise forms.ValidationError('Only .docx files are allowed.')
-        return document
+        return uploaded_file
 
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ['comments']
-        widgets = {
-            'comments': forms.Textarea(attrs={
-                'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition',
-                'placeholder': 'Write your feedback here...',
-                'rows': 3
-            }),
-        }
+        fields = ['comment']

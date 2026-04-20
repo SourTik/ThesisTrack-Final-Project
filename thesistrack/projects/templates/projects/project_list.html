@@ -5,13 +5,25 @@
     <div class="flex justify-between items-center">
         <div>
             <h1 class="text-3xl font-bold text-white">Your Projects</h1>
-            <p class="text-slate-400 mt-1">Manage and track your research progress.</p>
+            <p class="text-slate-400 mt-1">Manage your group, proposal, chapters, and reviews.</p>
         </div>
+        <div class="flex gap-3">
             {% if user.role == 'STUDENT' %}
+                <a href="{% url 'projects:create-group' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-bold transition-all border border-slate-700">
+                    Create Group
+                </a>
                 <a href="{% url 'projects:submit-project' %}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
-                    Submit New Proposal
+                    Submit Title
+                </a>
+            {% elif user.role == 'SUPERVISOR' %}
+                <a href="{% url 'projects:supervisor-dashboard' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-bold transition-all border border-slate-700">
+                    Supervisor Dashboard
+                </a>
+                <a href="{% url 'projects:supervisor-project-list' %}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
+                    Assigned Projects
                 </a>
             {% endif %}
+        </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -25,15 +37,31 @@
             
             <h3 class="text-xl font-bold text-white mt-4 group-hover:text-indigo-400 transition-colors">{{ project.title }}</h3>
             <p class="text-slate-400 mt-2 text-sm line-clamp-2">{{ project.abstract }}</p>
+
+            <div class="mt-4 space-y-2 text-sm text-slate-400">
+                <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Group:</span> {% if project.group %}{{ project.group.name }}{% else %}Not assigned{% endif %}</p>
+                <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Members:</span> {% if project.group %}{{ project.group.member_count }}{% else %}0{% endif %}</p>
+                <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Supervisor:</span> {% if project.supervisor %}{{ project.supervisor.username }}{% else %}Not assigned{% endif %}</p>
+                <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Title Approved:</span> {% if project.title_approved %}Yes{% else %}No{% endif %}</p>
+            </div>
             
             <div class="mt-6 pt-6 border-t border-slate-800 flex justify-between items-center">
-                <span class="text-xs text-slate-500 uppercase font-semibold">Supervisor: {{ project.supervisor }}</span>
-                        {% if user.role == 'STUDENT' and project.student_id == user.id %}
-                            <a href="{% url 'projects:submit-document' project.id %}" class="text-indigo-400 hover:text-white text-sm font-bold">Submit Doc</a>
-                        {% endif %}
-                        {% if user.role == 'SUPERVISOR' or user.role == 'ADMIN' %}
-                            <a href="{% url 'projects:approve-project' project.id %}" class="text-indigo-400 hover:text-white text-sm font-bold">Approve</a>
-                        {% endif %}
+                <span class="text-xs text-slate-500 uppercase font-semibold">Status: {{ project.get_status_display }}</span>
+                <div class="flex items-center gap-4 text-sm font-bold">
+                    {% if user.role == 'STUDENT' and project.title_approved and project.supervisor %}
+                        <a href="{% url 'projects:submit-document' project.id %}" class="text-indigo-400 hover:text-white">Upload Chapter</a>
+                    {% endif %}
+                    {% if user.role == 'ADMIN' and not project.title_approved %}
+                        <a href="{% url 'projects:approve-project' project.id %}" class="text-indigo-400 hover:text-white">Approve Title</a>
+                        <a href="{% url 'projects:reject-project' project.id %}" class="text-rose-400 hover:text-white">Reject Title</a>
+                    {% endif %}
+                    {% if user.role == 'ADMIN' and project.title_approved and not project.supervisor %}
+                        <a href="{% url 'projects:assign-supervisor' project.id %}" class="text-indigo-400 hover:text-white">Assign Supervisor</a>
+                    {% endif %}
+                    {% if user.role == 'SUPERVISOR' and project.supervisor_id == user.id %}
+                        <a href="{% url 'projects:supervisor-project-detail' project.id %}" class="text-indigo-400 hover:text-white">Project Details</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% empty %}
@@ -44,7 +72,7 @@
                 </svg>
             </div>
             <h3 class="text-xl font-bold text-white">No projects available</h3>
-            <p class="text-slate-500 mt-2">Start your journey by submitting a new proposal.</p>
+            <p class="text-slate-500 mt-2">Create a group first, then submit your title proposal.</p>
         </div>
         {% endfor %}
     </div>
