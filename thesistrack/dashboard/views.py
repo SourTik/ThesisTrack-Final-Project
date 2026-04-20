@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 
 from accounts.models import User
 from core.decorators import role_required
-from attendance.models import Attendance
+from attendance.models import StudentAttendance
 from notifications.models import Notification
 from projects.models import Group, Project, Submission
 
@@ -24,7 +24,7 @@ def home(request):
 def student_dashboard(request):
     group = Group.objects.filter(members=request.user).prefetch_related('members').first()
     project = Project.objects.filter(group=group).select_related('supervisor').first() if group else None
-    attendance_count = Attendance.objects.filter(student=request.user).count()
+    attendance_count = StudentAttendance.objects.filter(student=request.user, status='PRESENT').count()
     unread_notifications = Notification.objects.filter(user=request.user, is_read=False).count()
     return render(
         request,

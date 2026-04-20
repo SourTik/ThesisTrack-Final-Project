@@ -1,0 +1,73 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-6">
+    <div class="border-b border-slate-800 pb-6">
+        <h1 class="text-3xl font-bold text-white tracking-tight">My Attendance</h1>
+        <p class="text-slate-400 mt-2 text-sm">View your attendance history for project meetings.</p>
+    </div>
+
+    <!-- Attendance List -->
+    <div class="glass border border-slate-800 bg-[#0f172a]/50 rounded-2xl overflow-hidden shadow-2xl relative">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-900/50 text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                        <th class="px-6 py-4 border-b border-slate-800">Date</th>
+                        <th class="px-6 py-4 border-b border-slate-800">Project</th>
+                        <th class="px-6 py-4 border-b border-slate-800">Status</th>
+                        <th class="px-6 py-4 border-b border-slate-800">Remarks</th>
+                        <th class="px-6 py-4 border-b border-slate-800 text-right">Marked By Supervisor</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/50">
+                    {% for record in attendance_records %}
+                    <tr class="hover:bg-slate-800/20 transition-colors group">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-slate-300 font-medium">{{ record.date }}</span>
+                        </td>
+                        <td class="px-6 py-4 text-slate-400 text-sm">
+                            {{ record.project.title|default:"N/A" }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {% if record.status == 'PRESENT' %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                Present
+                            </span>
+                            {% elif record.status == 'ABSENT' %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                Absent
+                            </span>
+                            {% elif record.status == 'LATE' %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                Late
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20">
+                                Excused
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-slate-400 text-sm max-w-xs truncate" title="{{ record.remarks }}">
+                            {{ record.remarks|default:"—" }}
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <span class="text-slate-500 text-xs">{{ record.supervisor.get_full_name|default:record.supervisor.username }}</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                            <div class="flex flex-col items-center">
+                                <i class="fa-solid fa-file-circle-xmark text-4xl mb-3 text-slate-700"></i>
+                                <p>You have no attendance records yet.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
