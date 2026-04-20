@@ -1,19 +1,41 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="card">
-    <h1>Notifications</h1>
-    <ul>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="color: #fff;">Notifications</h2>
+        {% if unread_notifications_count > 0 %}
+            <a href="{% url 'notifications:mark-all-read' %}" class="btn btn-sm btn-outline-light">Mark all as read</a>
+        {% endif %}
+    </div>
+
+    <div class="list-group">
         {% for notification in notifications %}
-            <li>
-                <strong>{{ notification.title }}</strong>: {{ notification.message }}
-                {% if not notification.is_read %}
-                    <a href="{% url 'notifications:mark-as-read' notification.id %}">Mark as read</a>
-                {% endif %}
-            </li>
+            <div class="list-group-item mb-2 {% if not notification.is_read %}border-start border-primary border-4{% endif %}" 
+                 style="background: #252525; color: #eee; border: 1px solid #333;">
+                
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1" style="color: {% if not notification.is_read %}#007bff{% else %}#aaa{% endif %};">
+                        {{ notification.title }}
+                    </h5>
+                    <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
+                </div>
+                
+                <p class="mb-2">{{ notification.message }}</p>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-secondary">{{ notification.get_category_display }}</span>
+                    {% if not notification.is_read %}
+                        <a href="{% url 'notifications:mark-as-read' notification.id %}" class="btn btn-sm btn-link text-primary p-0">Mark as read</a>
+                    {% endif %}
+                </div>
+            </div>
         {% empty %}
-            <li>No notifications.</li>
+            <div class="text-center py-5">
+                <i class="fas fa-bell-slash fa-3x mb-3" style="color: #444;"></i>
+                <p style="color: #888;">Your inbox is empty.</p>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}

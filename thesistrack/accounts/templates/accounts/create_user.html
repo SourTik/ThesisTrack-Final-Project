@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+        <div class="mb-8">
+            <h2 class="text-3xl font-extrabold text-white">Create User</h2>
+            <p class="text-slate-400 mt-2">Administrators and superusers can create staff and student accounts here.</p>
+        </div>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="pt-4 flex items-center space-x-4">
+                <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:-translate-y-0.5">
+                    Create User
+                </button>
+                <a href="{% url 'dashboard:admin-dashboard' %}" class="px-6 py-3 text-slate-400 hover:text-white font-semibold transition">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

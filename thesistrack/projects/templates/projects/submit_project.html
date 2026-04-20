@@ -4,44 +4,22 @@
 <div class="max-w-2xl mx-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
         <div class="mb-8">
-            <h2 class="text-3xl font-extrabold text-white">Submit Project Proposal</h2>
-            <p class="text-slate-400 mt-2">Fill in the details to begin your research verification.</p>
+            <h2 class="text-3xl font-extrabold text-white">Submit Project Title</h2>
+            <p class="text-slate-400 mt-2">Your group must already contain 4 to 6 students before you can submit a title.</p>
+        </div>
+
+        <div class="mb-6 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
+            <p class="font-semibold text-white">Current Group</p>
+            <p class="mt-1">{% if group %}{{ group.name }}{% else %}No group found{% endif %}</p>
+            <p class="text-slate-500 mt-1">Please make sure every member is a student and no one belongs to another group.</p>
         </div>
 
         <form method="post" class="space-y-6">
             {% csrf_token %}
-            
-            <div>
-                <label class="block text-slate-300 text-sm font-semibold mb-2 ml-1">Project Title</label>
-                <input type="text" name="title" required placeholder="Enter a descriptive title..."
-                    class="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-            </div>
-
-            <div>
-                <label class="block text-slate-300 text-sm font-semibold mb-2 ml-1">Abstract / Summary</label>
-                <textarea name="abstract" rows="5" required placeholder="Briefly describe your research goals..."
-                    class="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"></textarea>
-            </div>
-
-            <div>
-                <label class="block text-slate-300 text-sm font-semibold mb-2 ml-1">Supervisor</label>
-                <div class="relative">
-                    <select name="supervisor" required
-                        class="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500 transition cursor-pointer">
-                        <option value="" disabled selected>Select a supervisor</option>
-                        {% for supervisor in supervisors %}
-                            <option value="{{ supervisor.id }}">{{ supervisor.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                        <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                    </div>
-                </div>
-            </div>
-
+            {{ form.as_p }}
             <div class="pt-4 flex items-center space-x-4">
                 <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:-translate-y-0.5">
-                    Submit Proposal
+                    Submit Title
                 </button>
                 <a href="{% url 'projects:project-list' %}" class="px-6 py-3 text-slate-400 hover:text-white font-semibold transition">
                     Cancel

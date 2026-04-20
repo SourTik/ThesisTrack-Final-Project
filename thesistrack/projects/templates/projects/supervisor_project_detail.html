@@ -1,0 +1,75 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="space-y-8">
+    <div class="flex justify-between items-start gap-6">
+        <div>
+            <p class="text-xs uppercase tracking-widest text-indigo-400">{{ project.get_status_display }}</p>
+            <h1 class="text-3xl font-bold text-white mt-2">{{ project.title }}</h1>
+            <p class="text-slate-400 mt-2">Group: {% if project.group %}{{ project.group.name }}{% else %}Not assigned{% endif %}</p>
+        </div>
+        <a href="{% url 'projects:supervisor-project-list' %}" class="px-5 py-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-200 hover:text-white hover:border-slate-500">
+            Back to Assigned Projects
+        </a>
+    </div>
+
+    <section class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+        <h2 class="text-lg font-bold text-white">Group Members</h2>
+        <div class="mt-4 grid gap-3 md:grid-cols-2">
+            {% for member in group_members %}
+            <div class="rounded-xl border border-slate-800 bg-slate-950/50 p-4">
+                <p class="text-white font-semibold">{{ member.get_full_name|default:member.username }}</p>
+                <p class="text-xs uppercase tracking-widest text-slate-500 mt-1">{{ member.role }}</p>
+            </div>
+            {% empty %}
+            <p class="text-slate-500">No members found.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+        <h2 class="text-lg font-bold text-white">Submissions</h2>
+        <div class="mt-5 space-y-4">
+            {% for submission in submissions %}
+            <article class="rounded-2xl border border-slate-800 bg-slate-950/50 p-5">
+                <div class="flex flex-wrap justify-between gap-3">
+                    <div>
+                        <p class="text-sm text-slate-400">{{ submission.chapter.name|default:'Unknown Chapter' }} · Version {{ submission.version }}</p>
+                        <p class="text-xs uppercase tracking-widest text-slate-500 mt-1">Submitted {{ submission.submitted_at|date:'M d, Y H:i' }}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold {% if submission.status == 'PENDING' %}bg-amber-500/15 text-amber-300 border border-amber-600/40{% elif submission.status == 'APPROVED' %}bg-emerald-500/15 text-emerald-300 border border-emerald-600/40{% else %}bg-rose-500/15 text-rose-300 border border-rose-600/40{% endif %}">
+                            {{ submission.get_status_display }}
+                        </span>
+                        <a href="{{ submission.file.url }}" target="_blank" class="text-indigo-400 hover:text-white text-sm font-semibold">Open File</a>
+                        {% if submission.id in latest_submission_ids and submission.status == 'PENDING' %}
+                        <a href="{% url 'projects:review-submission' submission.id %}" class="text-indigo-400 hover:text-white text-sm font-bold">Review</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mt-4 border-t border-slate-800 pt-4">
+                    <p class="text-xs uppercase tracking-widest text-slate-500">Feedback History</p>
+                    {% if submission.feedback_items.all %}
+                        <div class="mt-3 space-y-2">
+                            {% for feedback in submission.feedback_items.all %}
+                            <div class="rounded-lg border border-slate-800 bg-slate-900 p-3">
+                                <p class="text-xs text-slate-500">{{ feedback.created_at|date:'M d, Y H:i' }} by {{ feedback.supervisor.username }}</p>
+                                <p class="text-sm text-slate-300 mt-1">{{ feedback.comment }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-sm text-slate-500 mt-2">No feedback yet.</p>
+                    {% endif %}
+                </div>
+            </article>
+            {% empty %}
+            <div class="rounded-2xl border border-dashed border-slate-800 p-6 text-slate-500">
+                No submissions available for this project yet.
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}
