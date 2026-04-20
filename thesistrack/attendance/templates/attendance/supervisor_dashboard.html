@@ -1,0 +1,154 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-8">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-white tracking-tight">Student Attendance</h1>
+            <p class="text-slate-400 mt-2 text-sm">Manage attendance for your assigned students.</p>
+        </div>
+        <div class="mt-4 md:mt-0">
+             <a href="{% url 'attendance:supervisor_mark_attendance' %}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg transition-colors font-medium">
+                <i class="fa-solid fa-user-check mr-2"></i>
+                Mark Student Attendance
+            </a>
+        </div>
+    </div>
+
+    <!-- Student Attendance List -->
+    <div>
+        <h2 class="text-xl font-semibold text-slate-200 mb-4">Students Attendance Records</h2>
+        <div class="glass border border-slate-800 bg-[#0f172a]/50 rounded-2xl overflow-hidden shadow-2xl relative">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900/50 text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                            <th class="px-6 py-4 border-b border-slate-800">Date</th>
+                            <th class="px-6 py-4 border-b border-slate-800">Student</th>
+                            <th class="px-6 py-4 border-b border-slate-800">Project</th>
+                            <th class="px-6 py-4 border-b border-slate-800">Status</th>
+                            <th class="px-6 py-4 border-b border-slate-800">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/50">
+                        {% for record in student_records %}
+                        <tr class="hover:bg-slate-800/20 transition-colors group">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-slate-300 font-medium">{{ record.date }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div class="h-8 w-8 bg-indigo-500/20 text-indigo-400 rounded-full flex items-center justify-center font-bold text-xs mr-3">
+                                        {{ record.student.username|first|upper }}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-slate-200">{{ record.student.get_full_name|default:record.student.username }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-slate-400 text-sm">
+                                {{ record.project.title|default:"N/A" }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if record.status == 'PRESENT' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    Present
+                                </span>
+                                {% elif record.status == 'ABSENT' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                    Absent
+                                </span>
+                                {% elif record.status == 'LATE' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    Late
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20">
+                                    Excused
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-slate-400 text-sm max-w-xs truncate" title="{{ record.remarks }}">
+                                {{ record.remarks|default:"—" }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                                <div class="flex flex-col items-center">
+                                    <i class="fa-solid fa-users-slash text-4xl mb-3 text-slate-700"></i>
+                                    <p>No student attendance records found.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Attendance Records (From Admin) -->
+    <div class="mt-8">
+        <h2 class="text-xl font-semibold text-slate-200 mb-4">My Attendance History</h2>
+        <div class="glass border border-slate-800 bg-[#0f172a]/50 rounded-2xl overflow-hidden shadow-2xl relative">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900/50 text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                            <th class="px-6 py-4 border-b border-slate-800">Date</th>
+                            <th class="px-6 py-4 border-b border-slate-800">Status</th>
+                            <th class="px-6 py-4 border-b border-slate-800">Remarks</th>
+                            <th class="px-6 py-4 border-b border-slate-800 text-right">Marked By Admin</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/50">
+                        {% for record in my_records %}
+                        <tr class="hover:bg-slate-800/20 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-slate-300 font-medium">{{ record.date }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if record.status == 'PRESENT' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    Present
+                                </span>
+                                {% elif record.status == 'ABSENT' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                    Absent
+                                </span>
+                                {% elif record.status == 'LATE' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    Late
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20">
+                                    Inactive
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-slate-400 text-sm max-w-xs truncate" title="{{ record.remarks }}">
+                                {{ record.remarks|default:"—" }}
+                            </td>
+                            <td class="px-6 py-4 text-right text-slate-400 text-sm">
+                                {{ record.admin.username }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-12 text-center text-slate-500">
+                                <div class="flex flex-col items-center">
+                                    <i class="fa-solid fa-clock-rotate-left text-4xl mb-3 text-slate-700"></i>
+                                    <p>No personal attendance records found.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
