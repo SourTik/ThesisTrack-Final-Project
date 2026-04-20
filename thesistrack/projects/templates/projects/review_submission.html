@@ -1,13 +1,63 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="card">
-    <h1>Review Submission</h1>
-    <p>{{ submission.project.title }}</p>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Post Feedback</button>
-    </form>
+<div class="max-w-2xl mx-auto">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+        <div class="mb-8">
+            <h2 class="text-3xl font-extrabold text-white">Review Submission</h2>
+            <p class="text-slate-400 mt-2">Leave feedback and mark the submission as approved or rejected.</p>
+        </div>
+
+        <div class="mb-6 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
+            <p class="font-semibold text-white">Project</p>
+            <p class="mt-1">{{ submission.project.title }}</p>
+            <p class="text-slate-500 mt-1">Chapter: {{ submission.chapter.name }}</p>
+            <p class="text-slate-500 mt-1">Version: {{ submission.version }}</p>
+            <p class="text-slate-500 mt-1">Current Status: {{ submission.get_status_display }}</p>
+            <a href="{{ submission.file.url }}" target="_blank" class="inline-block mt-3 text-indigo-400 hover:text-white font-semibold">
+                Open Uploaded File
+            </a>
+        </div>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label class="block text-slate-300 text-sm font-semibold mb-2 ml-1">Decision</label>
+                <select name="decision" class="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Select decision</option>
+                    <option value="APPROVED">Approve</option>
+                    <option value="REJECTED">Reject</option>
+                </select>
+            </div>
+            {{ form.as_p }}
+            {% if form.non_field_errors %}
+                <div class="rounded-xl border border-rose-700 bg-rose-950/40 p-3 text-sm text-rose-300">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            <div class="pt-4 flex items-center space-x-4">
+                <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:-translate-y-0.5">
+                    Save Review
+                </button>
+                <a href="{% url 'projects:supervisor-project-detail' submission.project_id %}" class="px-6 py-3 text-slate-400 hover:text-white font-semibold transition">
+                    Cancel
+                </a>
+            </div>
+        </form>
+
+        {% if submission.feedback_items.exists %}
+        <div class="mt-8 border-t border-slate-800 pt-6">
+            <h3 class="text-lg font-bold text-white">Feedback History</h3>
+            <div class="mt-4 space-y-3">
+                {% for item in submission.feedback_items.all %}
+                <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                    <p class="text-xs uppercase tracking-widest text-slate-500">{{ item.created_at|date:'M d, Y H:i' }}</p>
+                    <p class="mt-2 text-sm text-slate-200">{{ item.comment }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

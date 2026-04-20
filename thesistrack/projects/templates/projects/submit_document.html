@@ -1,12 +1,32 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="card">
-    <h1>Submit DOCX for {{ project.title }}</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload</button>
-    </form>
+<div class="max-w-2xl mx-auto">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+        <div class="mb-8">
+            <h2 class="text-3xl font-extrabold text-white">Submit Chapter</h2>
+            <p class="text-slate-400 mt-2">Only .docx files are accepted, and uploads are allowed only after title approval and supervisor assignment.</p>
+        </div>
+
+        <div class="mb-6 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
+            <p class="font-semibold text-white">Project</p>
+            <p class="mt-1">{{ project.title }}</p>
+            <p class="text-slate-500 mt-1">Supervisor: {% if project.supervisor %}{{ project.supervisor.username }}{% else %}Not assigned{% endif %}</p>
+            <p class="mt-3 text-indigo-400 font-semibold">You are uploading: {{ chapter.name }} (Version {{ version }})</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="pt-4 flex items-center space-x-4">
+                <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:-translate-y-0.5">
+                    Upload Chapter
+                </button>
+                <a href="{% url 'projects:project-list' %}" class="px-6 py-3 text-slate-400 hover:text-white font-semibold transition">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
