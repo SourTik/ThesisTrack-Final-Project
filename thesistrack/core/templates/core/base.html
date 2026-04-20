@@ -5,15 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThesisTrack</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); }
-        /* Custom scrollbar for a sleek dark look */
+        
+        /* Custom scrollbar for high-end aesthetic */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Notification Pulse Animation */
+        .notification-pulse {
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+        }
+
+        /* Smooth transitions for links */
+        .nav-link { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="bg-[#0f172a] text-slate-200 antialiased">
@@ -26,19 +41,31 @@
             </div>
             
             <nav class="flex-1 px-4 space-y-2">
-                <a href="{% url 'dashboard:home' %}" class="flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl transition-all group">
+                <a href="{% url 'dashboard:home' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
+                    <i class="fa-solid fa-house mr-3 text-sm group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Dashboard</span>
                 </a>
-                <a href="{% url 'projects:project-list' %}" class="flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl transition-all">
+                <a href="{% url 'projects:project-list' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
+                    <i class="fa-solid fa-folder-open mr-3 text-sm group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Projects</span>
                 </a>
-                <a href="{% url 'attendance:attendance-list' %}" class="flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl transition-all">
+                <a href="{% url 'attendance:attendance-list' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
+                    <i class="fa-solid fa-calendar-check mr-3 text-sm group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Attendance</span>
                 </a>
-                <a href="{% url 'notifications:list' %}" class="flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl transition-all">
-                    <span class="font-medium">Notifications</span>
+                <a href="{% url 'notifications:list' %}" class="nav-link flex items-center justify-between px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-bell mr-3 text-sm group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Notifications</span>
+                    </div>
+                    {% if unread_notifications_count > 0 %}
+                        <span class="bg-indigo-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+                            {{ unread_notifications_count }}
+                        </span>
+                    {% endif %}
                 </a>
-                <a href="{% url 'core:layout-preview' %}" class="flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl transition-all">
+                <a href="{% url 'core:layout-preview' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
+                    <i class="fa-solid fa-layer-group mr-3 text-sm group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Layout Preview</span>
                 </a>
             </nav>
@@ -46,10 +73,8 @@
             <div class="p-4 border-t border-slate-800">
                 <form action="{% url 'accounts:logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="w-full flex items-center px-4 py-3 text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all font-semibold">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
+                    <button type="submit" class="w-full flex items-center px-4 py-3 text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all font-semibold group">
+                        <i class="fa-solid fa-right-from-bracket mr-3 group-hover:translate-x-1 transition-transform"></i>
                         Logout
                     </button>
                 </form>
@@ -64,13 +89,30 @@
                 <div>
                     <h2 class="text-slate-400 text-sm font-medium tracking-widest uppercase">System Overview</h2>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div class="text-right">
-                        <p class="text-sm font-bold text-white">{{ user.username }}</p>
-                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-tighter">{{ user.role }}</p>
+                
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        <a href="{% url 'notifications:list' %}" class="text-slate-400 hover:text-white transition-colors duration-300">
+                            <i class="fa-regular fa-bell text-xl"></i>
+                            {% if unread_notifications_count > 0 %}
+                                <span class="absolute -top-1 -right-1 flex h-4 w-4">
+                                    <span class="notification-pulse absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-4 w-4 bg-rose-600 text-[10px] font-bold text-white items-center justify-center">
+                                        {{ unread_notifications_count }}
+                                    </span>
+                                </span>
+                            {% endif %}
+                        </a>
                     </div>
-                    <div class="h-10 w-10 bg-indigo-600 rounded-full border-2 border-slate-800 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
-                        {{ user.username|first|upper }}
+
+                    <div class="flex items-center space-x-4 border-l border-slate-800 pl-6">
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-white">{{ user.username }}</p>
+                            <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-tighter">{{ user.role }}</p>
+                        </div>
+                        <div class="h-10 w-10 bg-indigo-600 rounded-full border-2 border-slate-800 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 transform hover:rotate-12 transition-transform cursor-pointer">
+                            {{ user.username|first|upper }}
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -80,7 +122,8 @@
                 {% if messages %}
                     <div class="max-w-4xl mx-auto mb-8 space-y-3">
                         {% for message in messages %}
-                            <div class="p-4 bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 rounded-2xl text-sm animate-pulse">
+                            <div class="p-4 bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 rounded-2xl text-sm flex items-center">
+                                <i class="fa-solid fa-circle-info mr-3"></i>
                                 {{ message }}
                             </div>
                         {% endfor %}
