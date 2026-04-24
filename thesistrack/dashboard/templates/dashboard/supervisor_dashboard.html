@@ -2,12 +2,17 @@
 
 {% block content %}
 <div class="space-y-8">
-    <div>
-        <h1 class="text-3xl font-bold text-white">Supervisor Dashboard</h1>
-        <p class="text-slate-400 mt-1">Review submissions, approvals, and group progress.</p>
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-white">Supervisor Dashboard</h1>
+            <p class="text-slate-400 mt-1">Review submissions, approvals, and group progress.</p>
+        </div>
+        <a href="{% url 'projects:supervisor-project-list' %}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-3 rounded-xl font-bold">
+            View Assigned Projects
+        </a>
     </div>
 
-    <div class="grid gap-6 md:grid-cols-3">
+    <div class="grid gap-6 md:grid-cols-4">
         <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
             <p class="text-xs uppercase tracking-widest text-slate-500">Supervised Projects</p>
             <p class="mt-2 text-2xl font-bold text-white">{{ supervised_projects }}</p>
@@ -20,6 +25,71 @@
             <p class="text-xs uppercase tracking-widest text-slate-500">Notifications</p>
             <p class="mt-2 text-2xl font-bold text-white">{{ unread_notifications }}</p>
         </div>
+        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Recent Reviews</p>
+            <p class="mt-2 text-2xl font-bold text-white">{{ recent_reviews|length }}</p>
+        </div>
     </div>
+
+    <section class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+        <h2 class="text-lg font-bold text-white">Recently Reviewed Submissions</h2>
+        <div class="mt-4 space-y-3">
+            {% for review in recent_reviews %}
+            <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                <p class="text-white font-semibold">{{ review.submission.project.title }}</p>
+                <p class="text-sm text-slate-400 mt-1">{{ review.submission.chapter.name|default:'Unknown Chapter' }} · Version {{ review.submission.version }}</p>
+                <p class="text-xs text-slate-500 mt-1">{{ review.created_at|date:'M d, Y H:i' }}</p>
+            </div>
+            {% empty %}
+            <p class="text-slate-500">No reviews submitted yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h2 class="text-lg font-bold text-white">Recent Submission Decisions</h2>
+            <div class="flex flex-wrap gap-2 text-xs font-bold uppercase tracking-wide">
+                <a href="{% url 'dashboard:supervisor-dashboard' %}" class="px-3 py-1 rounded-full border {% if not status_filter %}border-slate-500 text-white{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">All</a>
+                <a href="{% url 'dashboard:supervisor-dashboard' %}?status=PENDING" class="px-3 py-1 rounded-full border {% if status_filter == 'PENDING' %}border-amber-500 text-amber-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Pending</a>
+                <a href="{% url 'dashboard:supervisor-dashboard' %}?status=APPROVED" class="px-3 py-1 rounded-full border {% if status_filter == 'APPROVED' %}border-emerald-500 text-emerald-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Approved</a>
+                <a href="{% url 'dashboard:supervisor-dashboard' %}?status=REJECTED" class="px-3 py-1 rounded-full border {% if status_filter == 'REJECTED' %}border-rose-500 text-rose-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Rejected</a>
+            </div>
+        </div>
+
+        <div class="mt-4 space-y-3">
+            {% for submission in recent_submission_decisions %}
+            <article class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                        <p class="text-white font-semibold">{{ submission.project.title }}</p>
+                        <p class="text-sm text-slate-400 mt-1">{{ submission.chapter.name|default:'Unknown Chapter' }} · Version {{ submission.version }}</p>
+                        <p class="text-xs text-slate-500 mt-1">
+                            {% if submission.reviewed_at %}
+                                Reviewed {{ submission.reviewed_at|date:'M d, Y H:i' }}
+                            {% else %}
+                                Not reviewed yet
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <span class="px-3 py-1 rounded-full text-xs font-bold {% if submission.status == 'APPROVED' %}bg-emerald-500/15 text-emerald-300 border border-emerald-600/40{% elif submission.status == 'REJECTED' %}bg-rose-500/15 text-rose-300 border border-rose-600/40{% else %}bg-amber-500/15 text-amber-300 border border-amber-600/40{% endif %}">
+                        {{ submission.get_status_display }}
+                    </span>
+                </div>
+
+                <div class="mt-3 border-t border-slate-800 pt-3">
+                    <p class="text-xs uppercase tracking-widest text-slate-500">Feedback Preview</p>
+                    <p class="mt-1 text-sm text-slate-300">{{ submission.feedback_preview|default:'No feedback yet.'|truncatechars:140 }}</p>
+                    <a href="{% url 'projects:supervisor-project-detail' submission.project_id %}" class="inline-block mt-2 text-indigo-400 hover:text-white text-sm font-semibold">
+                        View Feedback Details
+                    </a>
+                </div>
+            </article>
+            {% empty %}
+            <p class="text-slate-500">No submissions found for the selected filter.</p>
+            {% endfor %}
+        </div>
+    </section>
 </div>
 {% endblock %}

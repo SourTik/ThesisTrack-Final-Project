@@ -4,11 +4,10 @@ from .models import StudentAttendance, SupervisorAttendance
 class StudentAttendanceForm(forms.ModelForm):
     class Meta:
         model = StudentAttendance
-        fields = ['student', 'project', 'date', 'status', 'remarks']
+        fields = ['student', 'date', 'status', 'remarks']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date', 'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
             'student': forms.Select(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
-            'project': forms.Select(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
             'status': forms.Select(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
             'remarks': forms.Textarea(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'rows': 3}),
         }
@@ -25,9 +24,7 @@ class StudentAttendanceForm(forms.ModelForm):
                 # No assigned students yet: show all students so the supervisor can still mark attendance.
                 self.fields['student'].queryset = User.objects.filter(role=User.STUDENT)
 
-            # Limit projects to those supervised by this supervisor
-            from projects.models import Project
-            self.fields['project'].queryset = Project.objects.filter(supervisor=supervisor)
+        self.fields['student'].help_text = 'Project will be selected automatically based on the student\'s project assigned to you.'
 
 
 class SupervisorAttendanceForm(forms.ModelForm):

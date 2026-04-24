@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ValidationError
 from .models import StudentAttendance, SupervisorAttendance
 from .forms import StudentAttendanceForm, SupervisorAttendanceForm
+from projects.models import Project
 
 @login_required
 def attendance_list(request):
@@ -75,7 +77,22 @@ def supervisor_mark_attendance(request):
         if form.is_valid():
             attendance = form.save(commit=False)
             attendance.supervisor = request.user
-            attendance.save()
+
+            project = Project.objects.filter(
+                supervisor=request.user,
+                group__members=attendance.student,
+            ).first()
+            if not project:
+                form.add_error('student', 'Selected student has no project assigned under your supervision.')
+                return render(request, 'attendance/mark_attendance.html', {'form': form, 'title': 'Mark Student Attendance'})
+
+            attendance.project = project
+            try:
+                attendance.save()
+            except ValidationError as exc:
+                form.add_error(None, exc)
+                return render(request, 'attendance/mark_attendance.html', {'form': form, 'title': 'Mark Student Attendance'})
+
             messages.success(request, 'Student attendance marked successfully.')
             return redirect('attendance:supervisor_attendance_dashboard')
     else:

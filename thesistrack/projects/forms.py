@@ -1,3 +1,5 @@
+from typing import cast
+
 from django import forms
 from django.db.models import Q
 from accounts.models import User
@@ -18,19 +20,23 @@ class GroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request_user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        members_field = cast(forms.ModelMultipleChoiceField, self.fields['members'])
 
         base_students = User.objects.filter(role=User.STUDENT).distinct()
+        grouped_student_ids = Group.objects.values_list('members__id', flat=True)
+
         if self.instance.pk:
             current_member_ids = self.instance.members.values_list('id', flat=True)
-            self.fields['members'].queryset = base_students.filter(
-                Q(project_groups__isnull=True) | Q(id__in=current_member_ids)
+            members_field.queryset = base_students.filter(
+                Q(id__in=current_member_ids) | ~Q(id__in=grouped_student_ids)
             ).distinct()
         else:
-            self.fields['members'].queryset = base_students.filter(project_groups__isnull=True)
+            members_field.queryset = base_students.exclude(id__in=grouped_student_ids).distinct()
 
         if self.request_user and self.request_user.role == User.STUDENT:
             current_selection = self.initial.get('members') or []
-            if self.request_user.pk not in [m.pk if hasattr(m, 'pk') else m for m in current_selection]:
+            selected_ids = [m.pk if hasattr(m, 'pk') else m for m in current_selection]
+            if self.request_user.pk in members_field.queryset.values_list('id', flat=True) and self.request_user.pk not in selected_ids:
                 self.initial['members'] = list(current_selection) + [self.request_user.pk]
 
     def clean_members(self):

@@ -164,6 +164,7 @@ class Submission(models.Model):
 	)
 	version = models.PositiveIntegerField(default=1)
 	status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+	reviewed_at = models.DateTimeField(null=True, blank=True)
 	submitted_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
@@ -208,6 +209,8 @@ class Feedback(models.Model):
 
 	def clean(self):
 		super().clean()
+		if not getattr(self, 'submission_id', None) or not getattr(self, 'supervisor_id', None):
+			raise ValidationError('Feedback must include a submission and a supervisor.')
 		project = self.submission.project
 		supervisor_id = getattr(project, 'supervisor_id', None)
 		if not supervisor_id:

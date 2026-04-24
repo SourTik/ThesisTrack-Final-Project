@@ -16,7 +16,7 @@
                     Submit Title
                 </a>
             {% elif user.role == 'SUPERVISOR' %}
-                <a href="{% url 'projects:supervisor-dashboard' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-bold transition-all border border-slate-700">
+                <a href="{% url 'dashboard:supervisor-dashboard' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-bold transition-all border border-slate-700">
                     Supervisor Dashboard
                 </a>
                 <a href="{% url 'projects:supervisor-project-list' %}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
@@ -42,14 +42,48 @@
                 <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Group:</span> {% if project.group %}{{ project.group.name }}{% else %}Not assigned{% endif %}</p>
                 <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Members:</span> {% if project.group %}{{ project.group.member_count }}{% else %}0{% endif %}</p>
                 <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Supervisor:</span> {% if project.supervisor %}{{ project.supervisor.username }}{% else %}Not assigned{% endif %}</p>
-                <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Title Approved:</span> {% if project.title_approved %}Yes{% else %}No{% endif %}</p>
+                <p>
+                    <span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Title Decision:</span>
+                    {% if project.title_approved %}
+                        <span class="text-emerald-300 font-semibold">Accepted</span>
+                    {% elif project.status == 'TITLE_REJECTED' %}
+                        <span class="text-rose-300 font-semibold">Rejected</span>
+                    {% else %}
+                        <span class="text-amber-300 font-semibold">Pending</span>
+                    {% endif %}
+                </p>
+                {% with latest_submission=project.submissions.first %}
+                    <p>
+                        <span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Latest Chapter:</span>
+                        {% if latest_submission %}
+                            {% if latest_submission.status == 'APPROVED' %}
+                                <span class="text-emerald-300 font-semibold">Accepted</span>
+                            {% elif latest_submission.status == 'REJECTED' %}
+                                <span class="text-rose-300 font-semibold">Rejected</span>
+                            {% else %}
+                                <span class="text-amber-300 font-semibold">Pending Review</span>
+                            {% endif %}
+                            <span class="text-slate-500">({{ latest_submission.chapter.name|default:'Chapter' }} v{{ latest_submission.version }})</span>
+                        {% else %}
+                            <span class="text-slate-500">No chapter submitted yet</span>
+                        {% endif %}
+                    </p>
+                {% endwith %}
             </div>
             
             <div class="mt-6 pt-6 border-t border-slate-800 flex justify-between items-center">
                 <span class="text-xs text-slate-500 uppercase font-semibold">Status: {{ project.get_status_display }}</span>
                 <div class="flex items-center gap-4 text-sm font-bold">
                     {% if user.role == 'STUDENT' and project.title_approved and project.supervisor %}
-                        <a href="{% url 'projects:submit-document' project.id %}" class="text-indigo-400 hover:text-white">Upload Chapter</a>
+                        {% with latest_submission=project.submissions.first %}
+                            <a href="{% url 'projects:submit-document' project.id %}" class="text-indigo-400 hover:text-white">
+                                {% if latest_submission and latest_submission.status == 'REJECTED' %}
+                                    Upload New Version
+                                {% else %}
+                                    Upload Chapter
+                                {% endif %}
+                            </a>
+                        {% endwith %}
                     {% endif %}
                     {% if user.role == 'ADMIN' and not project.title_approved %}
                         <a href="{% url 'projects:approve-project' project.id %}" class="text-indigo-400 hover:text-white">Approve Title</a>

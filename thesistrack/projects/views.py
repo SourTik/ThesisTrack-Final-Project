@@ -1,12 +1,13 @@
 from django.core.exceptions import PermissionDenied
 from django.db.models import Max, Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from accounts.models import User
 from core.decorators import role_required
 from notifications.models import Notification
 from .forms import FeedbackForm, GroupForm, ProjectForm, SubmissionForm, SupervisorAssignmentForm
-from .models import Chapter, Feedback, Group, Project, Submission
+from .models import Chapter, Group, Project, Submission
 
 
 def _admin_recipients():
@@ -26,11 +27,11 @@ def _notify_admins(sender, title, message):
 
 def _project_visible_to_user(user):
 	if user.role == User.STUDENT:
-		return Project.objects.filter(group__members=user)
+		return Project.objects.filter(group__members=user).select_related('group', 'supervisor').prefetch_related('submissions__chapter')
 	if user.role == User.SUPERVISOR:
-		return Project.objects.filter(supervisor=user)
+		return Project.objects.filter(supervisor=user).select_related('group', 'supervisor').prefetch_related('submissions__chapter')
 	if user.role == User.ADMIN:
-		return Project.objects.all()
+		return Project.objects.all().select_related('group', 'supervisor').prefetch_related('submissions__chapter')
 	return Project.objects.none()
 
 
@@ -326,26 +327,6 @@ def supervisor_project_detail(request, project_id):
 
 
 @role_required(User.SUPERVISOR)
-def supervisor_dashboard(request):
-	assigned_projects = Project.objects.filter(supervisor=request.user).count()
-	pending_reviews = Submission.objects.filter(project__supervisor=request.user, status=Submission.PENDING).count()
-	recent_reviews = (
-		Feedback.objects.filter(supervisor=request.user)
-		.select_related('submission__project', 'submission__chapter')
-		.order_by('-created_at')[:5]
-	)
-	return render(
-		request,
-		'projects/supervisor_dashboard.html',
-		{
-			'assigned_projects': assigned_projects,
-			'pending_reviews': pending_reviews,
-			'recent_reviews': recent_reviews,
-		},
-	)
-
-
-@role_required(User.SUPERVISOR)
 def review_submission(request, submission_id):
 	submission = get_object_or_404(Submission, id=submission_id)
 	_ensure_assigned_supervisor_or_403(submission.project, request.user)
@@ -359,6 +340,8 @@ def review_submission(request, submission_id):
 		raise PermissionDenied('This submission has already been reviewed.')
 
 	form = FeedbackForm(request.POST or None)
+	form.instance.submission = submission
+	form.instance.supervisor = request.user
 	if request.method == 'POST' and form.is_valid():
 		decision = request.POST.get('decision')
 		if decision not in {Submission.APPROVED, Submission.REJECTED}:
@@ -369,13 +352,11 @@ def review_submission(request, submission_id):
 		if form.errors:
 			return render(request, 'projects/review_submission.html', {'form': form, 'submission': submission})
 
-		feedback = form.save(commit=False)
-		feedback.submission = submission
-		feedback.supervisor = request.user
-		feedback.save()
+		form.save()
 
 		submission.status = decision
-		submission.save(update_fields=['status'])
+		submission.reviewed_at = timezone.now()
+		submission.save(update_fields=['status', 'reviewed_at'])
 
 		group = getattr(submission.project, 'group', None)
 		for member in group.members.all() if group else []:

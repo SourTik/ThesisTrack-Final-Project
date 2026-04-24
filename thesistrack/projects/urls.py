@@ -6,7 +6,6 @@ app_name = 'projects'
 
 urlpatterns = [
     path('', views.project_list, name='project-list'),
-    path('supervisor/dashboard/', views.supervisor_dashboard, name='supervisor-dashboard'),
     path('supervisor/projects/', views.supervisor_assigned_projects, name='supervisor-project-list'),
     path('supervisor/projects/<int:project_id>/', views.supervisor_project_detail, name='supervisor-project-detail'),
     path('groups/create/', views.create_group, name='create-group'),
