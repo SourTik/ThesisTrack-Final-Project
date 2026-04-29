@@ -1,0 +1,40 @@
+{% extends 'dashboard/reports/base_reports.html' %}
+
+{% block report_content %}
+<div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900">
+    <table class="min-w-full text-sm">
+        <thead class="bg-slate-950 text-slate-400 uppercase text-xs">
+            <tr>
+                <th class="px-4 py-3 text-left">Project</th>
+                <th class="px-4 py-3 text-left">Group</th>
+                <th class="px-4 py-3 text-left">Members</th>
+                <th class="px-4 py-3 text-left">Supervisor</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-left">Current Chapter</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr class="border-t border-slate-800 text-slate-300 align-top">
+                <td class="px-4 py-3">{{ project.title }}</td>
+                <td class="px-4 py-3">{{ project.group.name|default:'-' }}</td>
+                <td class="px-4 py-3">
+                    {% if project.group %}
+                        {% for member in project.group.members.all %}
+                            <div>{{ member.get_full_name|default:member.username }}</div>
+                        {% endfor %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3">{{ project.supervisor.username|default:'Not assigned' }}</td>
+                <td class="px-4 py-3">{{ project.get_status_display }}</td>
+                <td class="px-4 py-3">{{ project.latest_approved_chapter|default:project.latest_submitted_chapter|default:'No submissions yet' }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="px-4 py-4 text-slate-500">No projects found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

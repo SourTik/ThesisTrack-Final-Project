@@ -1,0 +1,56 @@
+{% extends 'dashboard/reports/base_reports.html' %}
+
+{% block report_content %}
+<div class="grid gap-4 md:grid-cols-3 mb-4">
+    <div class="rounded-xl border border-emerald-900 bg-emerald-950/30 p-4">
+        <p class="text-xs text-emerald-300 uppercase">Approved</p>
+        <p class="text-2xl font-bold text-white">{{ summary.approved }}</p>
+    </div>
+    <div class="rounded-xl border border-amber-900 bg-amber-950/30 p-4">
+        <p class="text-xs text-amber-300 uppercase">Pending</p>
+        <p class="text-2xl font-bold text-white">{{ summary.pending }}</p>
+    </div>
+    <div class="rounded-xl border border-rose-900 bg-rose-950/30 p-4">
+        <p class="text-xs text-rose-300 uppercase">Rejected</p>
+        <p class="text-2xl font-bold text-white">{{ summary.rejected }}</p>
+    </div>
+</div>
+<div class="mb-3 flex gap-2 text-xs font-bold uppercase tracking-wide">
+    <a href="{% url 'dashboard:admin-report-title-approvals' %}" class="px-3 py-1 rounded-full border {% if not state_filter %}border-slate-500 text-white{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">All</a>
+    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=approved" class="px-3 py-1 rounded-full border {% if state_filter == 'approved' %}border-emerald-500 text-emerald-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Approved</a>
+    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=pending" class="px-3 py-1 rounded-full border {% if state_filter == 'pending' %}border-amber-500 text-amber-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Pending</a>
+    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=rejected" class="px-3 py-1 rounded-full border {% if state_filter == 'rejected' %}border-rose-500 text-rose-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Rejected</a>
+</div>
+<div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900">
+    <table class="min-w-full text-sm">
+        <thead class="bg-slate-950 text-slate-400 uppercase text-xs">
+            <tr>
+                <th class="px-4 py-3 text-left">Project</th>
+                <th class="px-4 py-3 text-left">Group</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-left">Approval Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr class="border-t border-slate-800 text-slate-300">
+                <td class="px-4 py-3">{{ project.title }}</td>
+                <td class="px-4 py-3">{{ project.group.name|default:'-' }}</td>
+                <td class="px-4 py-3">
+                    {% if project.status == 'TITLE_REJECTED' %}
+                        Rejected
+                    {% elif project.title_approved %}
+                        Approved
+                    {% else %}
+                        Pending
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3">{{ project.approval_date|date:'Y-m-d H:i'|default:'-' }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="px-4 py-4 text-slate-500">No projects found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

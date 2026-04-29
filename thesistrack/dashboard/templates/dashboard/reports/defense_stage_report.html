@@ -1,0 +1,56 @@
+{% extends 'dashboard/reports/base_reports.html' %}
+
+{% block report_content %}
+<div class="grid gap-6 lg:grid-cols-2">
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-4">
+        <h2 class="text-lg font-semibold text-white mb-3">Ready for Defense</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead class="text-slate-400 uppercase text-xs">
+                    <tr>
+                        <th class="px-3 py-2 text-left">Project</th>
+                        <th class="px-3 py-2 text-left">Group</th>
+                        <th class="px-3 py-2 text-left">Supervisor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in ready_for_defense %}
+                    <tr class="border-t border-slate-800 text-slate-300">
+                        <td class="px-3 py-2">{{ project.title }}</td>
+                        <td class="px-3 py-2">{{ project.group.name|default:'-' }}</td>
+                        <td class="px-3 py-2">{{ project.supervisor.username|default:'-' }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3" class="px-3 py-3 text-slate-500">No projects are currently ready for defense.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-4">
+        <h2 class="text-lg font-semibold text-white mb-3">Completed Projects</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead class="text-slate-400 uppercase text-xs">
+                    <tr>
+                        <th class="px-3 py-2 text-left">Project</th>
+                        <th class="px-3 py-2 text-left">Group</th>
+                        <th class="px-3 py-2 text-left">Supervisor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in completed_projects %}
+                    <tr class="border-t border-slate-800 text-slate-300">
+                        <td class="px-3 py-2">{{ project.title }}</td>
+                        <td class="px-3 py-2">{{ project.group.name|default:'-' }}</td>
+                        <td class="px-3 py-2">{{ project.supervisor.username|default:'-' }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3" class="px-3 py-3 text-slate-500">No completed projects recorded yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

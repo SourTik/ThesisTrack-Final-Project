@@ -1,0 +1,38 @@
+{% extends 'dashboard/reports/base_reports.html' %}
+
+{% block report_content %}
+<div class="mb-3 flex gap-2 text-xs font-bold uppercase tracking-wide">
+    <a href="{% url 'dashboard:admin-report-submissions' %}" class="px-3 py-1 rounded-full border {% if not status_filter %}border-slate-500 text-white{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">All</a>
+    <a href="{% url 'dashboard:admin-report-submissions' %}?status=PENDING" class="px-3 py-1 rounded-full border {% if status_filter == 'PENDING' %}border-amber-500 text-amber-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Pending</a>
+    <a href="{% url 'dashboard:admin-report-submissions' %}?status=APPROVED" class="px-3 py-1 rounded-full border {% if status_filter == 'APPROVED' %}border-emerald-500 text-emerald-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Approved</a>
+    <a href="{% url 'dashboard:admin-report-submissions' %}?status=REJECTED" class="px-3 py-1 rounded-full border {% if status_filter == 'REJECTED' %}border-rose-500 text-rose-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Rejected</a>
+</div>
+<div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900">
+    <table class="min-w-full text-sm">
+        <thead class="bg-slate-950 text-slate-400 uppercase text-xs">
+            <tr>
+                <th class="px-4 py-3 text-left">Project</th>
+                <th class="px-4 py-3 text-left">Chapter</th>
+                <th class="px-4 py-3 text-left">Version</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-left">Re-uploads</th>
+                <th class="px-4 py-3 text-left">Submitted</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for submission in submissions %}
+            <tr class="border-t border-slate-800 text-slate-300">
+                <td class="px-4 py-3">{{ submission.project.title }}</td>
+                <td class="px-4 py-3">{{ submission.chapter.name|default:'-' }}</td>
+                <td class="px-4 py-3">{{ submission.version }}</td>
+                <td class="px-4 py-3">{{ submission.get_status_display }}</td>
+                <td class="px-4 py-3">{{ submission.reupload_count|default:1 }}</td>
+                <td class="px-4 py-3">{{ submission.submitted_at|date:'Y-m-d H:i' }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="px-4 py-4 text-slate-500">No submissions found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

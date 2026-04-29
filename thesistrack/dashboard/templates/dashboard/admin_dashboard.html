@@ -2,9 +2,14 @@
 
 {% block content %}
 <div class="space-y-8">
-    <div>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
         <h1 class="text-3xl font-bold text-white">Admin Dashboard</h1>
         <p class="text-slate-400 mt-1">Oversee accounts, groups, titles, and chapter reviews.</p>
+        </div>
+        <a href="{% url 'dashboard:admin-reports-home' %}" class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-500">
+            Open Reports Center
+        </a>
     </div>
 
     <div class="grid gap-6 md:grid-cols-3 xl:grid-cols-6">

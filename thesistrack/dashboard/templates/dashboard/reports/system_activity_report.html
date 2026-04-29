@@ -1,0 +1,26 @@
+{% extends 'dashboard/reports/base_reports.html' %}
+
+{% block report_content %}
+<div class="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Projects</p>
+        <p class="mt-2 text-2xl font-bold text-white">{{ summary.total_projects }}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Submissions</p>
+        <p class="mt-2 text-2xl font-bold text-white">{{ summary.total_submissions }}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Approvals</p>
+        <p class="mt-2 text-2xl font-bold text-emerald-300">{{ summary.total_approvals }}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Rejections</p>
+        <p class="mt-2 text-2xl font-bold text-rose-300">{{ summary.total_rejections }}</p>
+    </div>
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+        <p class="text-xs uppercase tracking-widest text-slate-500">Active Users</p>
+        <p class="mt-2 text-2xl font-bold text-white">{{ summary.total_active_users }}</p>
+    </div>
+</div>
+{% endblock %}
