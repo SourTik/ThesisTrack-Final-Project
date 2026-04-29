@@ -93,7 +93,7 @@ ThesisTrack/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/SourTik/thesistrack.git
+git clone https://github.com/SourTik/thesistrack
 cd thesistrack
 ```
 
