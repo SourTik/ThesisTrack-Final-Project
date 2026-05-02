@@ -15,12 +15,20 @@ class AdminUserCreationForm(UserCreationForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'role']
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl'}),
-            'first_name': forms.TextInput(attrs={'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl'}),
-            'last_name': forms.TextInput(attrs={'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl'}),
-            'email': forms.EmailInput(attrs={'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl'}),
-            'role': forms.Select(attrs={'class': 'w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl'}),
+            'username': forms.TextInput(attrs={'class': 'w-full bg-white border border-black/10 text-slate-800 px-4 py-3 rounded-xl'}),
+            'first_name': forms.TextInput(attrs={'class': 'w-full bg-white border border-black/10 text-slate-800 px-4 py-3 rounded-xl'}),
+            'last_name': forms.TextInput(attrs={'class': 'w-full bg-white border border-black/10 text-slate-800 px-4 py-3 rounded-xl'}),
+            'email': forms.EmailInput(attrs={'class': 'w-full bg-white border border-black/10 text-slate-800 px-4 py-3 rounded-xl'}),
+            'role': forms.Select(attrs={'class': 'w-full bg-white border border-black/10 text-slate-800 px-4 py-3 rounded-xl'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        pw_class = 'w-full bg-white border border-black/10 text-slate-800 px-4 py-3 rounded-xl'
+        if 'password1' in self.fields:
+            self.fields['password1'].widget.attrs.update({'class': pw_class})
+        if 'password2' in self.fields:
+            self.fields['password2'].widget.attrs.update({'class': pw_class})
 
     def save(self, commit=True):
         user = super().save(commit=False)

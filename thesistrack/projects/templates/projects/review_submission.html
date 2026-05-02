@@ -1,20 +1,20 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
-        <div class="mb-8">
-            <h2 class="text-3xl font-extrabold text-white">Review Submission</h2>
-            <p class="text-slate-400 mt-2">Leave feedback and mark the submission as approved or rejected.</p>
+<div class="mx-auto max-w-2xl">
+    <div class="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-black/5">
+        <div class="mb-6">
+            <h2 class="text-3xl font-extrabold text-slate-900">Review Submission</h2>
+            <p class="text-slate-600 mt-2">Leave feedback and mark the submission as approved or rejected.</p>
         </div>
 
-        <div class="mb-6 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
-            <p class="font-semibold text-white">Project</p>
+        <div class="mb-6 rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
+            <p class="font-semibold text-slate-900">Project</p>
             <p class="mt-1">{{ submission.project.title }}</p>
             <p class="text-slate-500 mt-1">Chapter: {{ submission.chapter.name }}</p>
             <p class="text-slate-500 mt-1">Version: {{ submission.version }}</p>
             <p class="text-slate-500 mt-1">Current Status: {{ submission.get_status_display }}</p>
-            <a href="{{ submission.file.url }}" target="_blank" class="inline-block mt-3 text-indigo-400 hover:text-white font-semibold">
+            <a href="{{ submission.file.url }}" target="_blank" class="inline-block mt-3 text-[#800000] hover:underline font-semibold">
                 Open Uploaded File
             </a>
         </div>
@@ -22,8 +22,8 @@
         <form method="post" class="space-y-6">
             {% csrf_token %}
             <div>
-                <label class="block text-slate-300 text-sm font-semibold mb-2 ml-1">Decision</label>
-                <select name="decision" class="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <label class="block text-slate-700 text-sm font-semibold mb-2 ml-1">Decision</label>
+                <select name="decision" class="w-full bg-white border border-black/10 text-slate-800 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#800000]">
                     <option value="">Select decision</option>
                     <option value="APPROVED">Approve</option>
                     <option value="REJECTED">Reject</option>
@@ -31,28 +31,28 @@
             </div>
             {{ form.as_p }}
             {% if form.non_field_errors %}
-                <div class="rounded-xl border border-rose-700 bg-rose-950/40 p-3 text-sm text-rose-300">
+                <div class="rounded-xl border border-rose-700 bg-rose-50/40 p-3 text-sm text-rose-700">
                     {{ form.non_field_errors }}
                 </div>
             {% endif %}
             <div class="pt-4 flex items-center space-x-4">
-                <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:-translate-y-0.5">
+                <button type="submit" class="flex-1 bg-[#800000] hover:bg-[#6f0000] text-white font-bold py-3 rounded-xl shadow-[0_10px_24px_rgba(128,0,0,0.2)] transition-all">
                     Save Review
                 </button>
-                <a href="{% url 'projects:supervisor-project-detail' submission.project_id %}" class="px-6 py-3 text-slate-400 hover:text-white font-semibold transition">
+                <a href="{% url 'projects:supervisor-project-detail' submission.project_id %}" class="px-6 py-3 text-slate-500 hover:text-[#800000] font-semibold transition">
                     Cancel
                 </a>
             </div>
         </form>
 
         {% if submission.feedback_items.exists %}
-        <div class="mt-8 border-t border-slate-800 pt-6">
-            <h3 class="text-lg font-bold text-white">Feedback History</h3>
+        <div class="mt-8 border-t border-black/5 pt-6">
+            <h3 class="text-lg font-bold text-slate-900">Feedback History</h3>
             <div class="mt-4 space-y-3">
                 {% for item in submission.feedback_items.all %}
-                <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                <div class="rounded-xl bg-white p-4 border border-black/5">
                     <p class="text-xs uppercase tracking-widest text-slate-500">{{ item.created_at|date:'M d, Y H:i' }}</p>
-                    <p class="mt-2 text-sm text-slate-200">{{ item.comment }}</p>
+                    <p class="mt-2 text-sm text-slate-700">{{ item.comment }}</p>
                 </div>
                 {% endfor %}
             </div>

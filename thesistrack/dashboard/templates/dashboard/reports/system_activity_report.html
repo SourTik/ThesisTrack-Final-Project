@@ -2,25 +2,25 @@
 
 {% block report_content %}
 <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
-    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <p class="text-xs uppercase tracking-widest text-slate-500">Projects</p>
-        <p class="mt-2 text-2xl font-bold text-white">{{ summary.total_projects }}</p>
+    <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+        <p class="text-[10px] uppercase tracking-widest text-slate-400">Projects</p>
+        <p class="mt-2 text-3xl font-black text-slate-950">{{ summary.total_projects }}</p>
     </div>
-    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <p class="text-xs uppercase tracking-widest text-slate-500">Submissions</p>
-        <p class="mt-2 text-2xl font-bold text-white">{{ summary.total_submissions }}</p>
+    <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+        <p class="text-[10px] uppercase tracking-widest text-slate-400">Submissions</p>
+        <p class="mt-2 text-3xl font-black text-slate-950">{{ summary.total_submissions }}</p>
     </div>
-    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <p class="text-xs uppercase tracking-widest text-slate-500">Approvals</p>
-        <p class="mt-2 text-2xl font-bold text-emerald-300">{{ summary.total_approvals }}</p>
+    <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+        <p class="text-[10px] uppercase tracking-widest text-slate-400">Approvals</p>
+        <p class="mt-2 text-3xl font-black text-emerald-700">{{ summary.total_approvals }}</p>
     </div>
-    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <p class="text-xs uppercase tracking-widest text-slate-500">Rejections</p>
-        <p class="mt-2 text-2xl font-bold text-rose-300">{{ summary.total_rejections }}</p>
+    <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+        <p class="text-[10px] uppercase tracking-widest text-slate-400">Rejections</p>
+        <p class="mt-2 text-3xl font-black text-rose-700">{{ summary.total_rejections }}</p>
     </div>
-    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <p class="text-xs uppercase tracking-widest text-slate-500">Active Users</p>
-        <p class="mt-2 text-2xl font-bold text-white">{{ summary.total_active_users }}</p>
+    <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+        <p class="text-[10px] uppercase tracking-widest text-slate-400">Active Users</p>
+        <p class="mt-2 text-3xl font-black text-slate-950">{{ summary.total_active_users }}</p>
     </div>
 </div>
 {% endblock %}

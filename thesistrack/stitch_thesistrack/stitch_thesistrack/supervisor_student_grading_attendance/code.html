@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ThesisTrack | Supervisor Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#4b3e00",
+                      "tertiary-fixed-dim": "#e9c400",
+                      "outline": "#8e706b",
+                      "on-error": "#ffffff",
+                      "primary-fixed": "#ffdad4",
+                      "on-secondary-fixed": "#161d1f",
+                      "on-error-container": "#93000a",
+                      "primary": "#610000",
+                      "inverse-surface": "#2f3131",
+                      "inverse-primary": "#ffb4a8",
+                      "surface": "#f9f9f9",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#e8e8e8",
+                      "on-secondary-container": "#5d6467",
+                      "primary-fixed-dim": "#ffb4a8",
+                      "on-tertiary-fixed-variant": "#544600",
+                      "secondary-container": "#dae1e4",
+                      "surface-container": "#eeeeee",
+                      "on-secondary-fixed-variant": "#41484b",
+                      "on-tertiary-fixed": "#221b00",
+                      "surface-bright": "#f9f9f9",
+                      "tertiary-container": "#c8a900",
+                      "on-surface": "#1a1c1c",
+                      "on-secondary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-tint": "#b52619",
+                      "secondary": "#585f62",
+                      "on-primary-fixed": "#410000",
+                      "on-primary-container": "#ff907f",
+                      "outline-variant": "#e3beb8",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#f1f1f1",
+                      "surface-container-low": "#f3f3f3",
+                      "secondary-fixed-dim": "#c1c8cb",
+                      "on-surface-variant": "#5a403c",
+                      "surface-variant": "#e2e2e2",
+                      "surface-dim": "#dadada",
+                      "on-primary-fixed-variant": "#920703",
+                      "background": "#f9f9f9",
+                      "secondary-fixed": "#dde3e7",
+                      "primary-container": "#8b0000",
+                      "on-background": "#1a1c1c",
+                      "tertiary-fixed": "#ffe16d",
+                      "tertiary": "#705d00",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#e2e2e2",
+                      "error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "display": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+      </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/70 backdrop-blur-xl shadow-sm h-16 flex justify-between items-center px-8">
+<div class="text-xl font-manrope font-black text-red-950 uppercase tracking-widest">ThesisTrack</div>
+<nav class="hidden md:flex gap-8 items-center h-full">
+<a class="font-manrope text-sm font-bold tracking-tight text-slate-500 hover:text-red-800 transition-all duration-300" href="#">Dashboard</a>
+<a class="font-manrope text-sm font-bold tracking-tight text-red-900 border-b-2 border-red-900 pb-1" href="#">Attendance</a>
+<a class="font-manrope text-sm font-bold tracking-tight text-red-900 border-b-2 border-red-900 pb-1" href="#">Grading</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-200/50 rounded-full transition-all">
+<span class="material-symbols-outlined text-slate-600">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-200/50 rounded-full transition-all">
+<span class="material-symbols-outlined text-slate-600">settings</span>
+</button>
+<img alt="Academic User Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" data-alt="Professional headshot of a university professor in a light grey blazer with a scholarly expression and warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYYNWvyaopZfvpgAKCM3tC7dlXJJAEn2xE17SsfEo827t0-5KYnWpWzhzTqrJrrZGoHm6vyPUzpMxp9uFTLkhc_sgjqCD35zr0slEW2ObMP4iSq-0aYmkGfulr1PfeGu6AQgB6L8bDf0LIivJ8d-cqIY7bmDZpQ1bNNzaKc588LwOJ2KlW9w8X8loSP1e4qkVvqvxlOD5F4pcHcBr7mWlAGRXrA2u3_YiC9eM4E4UNB6fIr4m5tPyFnXSYrFfuRPOb6ojMBpFsYDvZ"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col h-screen w-72 left-0 top-0 fixed bg-slate-100 py-6 gap-2 z-40">
+<div class="px-8 mb-10 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div>
+<h2 class="text-lg font-manrope font-black text-red-950">The Curator</h2>
+<p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Academic Workspace</p>
+</div>
+</div>
+<nav class="flex-grow">
+<div class="flex items-center gap-3 mx-4 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-200 transition-all cursor-pointer">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-manrope text-sm font-semibold tracking-wide">Overview</span>
+</div>
+<div class="flex items-center gap-3 text-red-900 bg-white rounded-l-xl border-l-4 border-red-900 ml-4 pl-4 py-3 shadow-sm transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<span class="font-manrope text-sm font-semibold tracking-wide">Attendance</span>
+</div>
+<div class="flex items-center gap-3 text-red-900 bg-white rounded-l-xl border-l-4 border-red-900 ml-4 pl-4 py-3 shadow-sm transition-all mt-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-manrope text-sm font-semibold tracking-wide">Grading</span>
+</div>
+<div class="flex items-center gap-3 mx-4 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-200 transition-all cursor-pointer">
+<span class="material-symbols-outlined">description</span>
+<span class="font-manrope text-sm font-semibold tracking-wide">Thesis Drafts</span>
+</div>
+<div class="flex items-center gap-3 mx-4 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-200 transition-all cursor-pointer">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-manrope text-sm font-semibold tracking-wide">Milestones</span>
+</div>
+</nav>
+<div class="mt-auto px-4 space-y-1">
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary py-3 rounded-xl font-manrope font-bold text-sm transition-all mb-4">
+                New Entry
+            </button>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-200 transition-all cursor-pointer">
+<span class="material-symbols-outlined">help</span>
+<span class="font-manrope text-sm font-semibold tracking-wide">Support</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-200 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-error">logout</span>
+<span class="font-manrope text-sm font-semibold tracking-wide text-error">Sign Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-72 pt-24 px-8 pb-12 min-h-screen">
+<!-- Header & Summary Bento Grid -->
+<div class="grid grid-cols-12 gap-6 mb-12">
+<div class="col-span-12 md:col-span-8">
+<div class="flex items-end gap-4 mb-4">
+<h1 class="text-4xl font-manrope font-extrabold tracking-tighter text-primary">Workspace Group A-24</h1>
+<span class="mb-1.5 px-3 py-1 bg-tertiary-fixed text-on-tertiary-container rounded-full text-xs font-bold uppercase tracking-wider">Active Cohort</span>
+</div>
+<p class="text-on-surface-variant body-lg max-w-2xl leading-relaxed">
+                    Welcome to your curated supervisor dashboard. Manage attendance records and evaluate milestone progress for your assigned thesis students.
+                </p>
+</div>
+<div class="col-span-12 md:col-span-4 grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-5 rounded-full shadow-sm flex flex-col justify-center items-center text-center">
+<span class="text-3xl font-manrope font-black text-primary">94%</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Avg Attendance</span>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-full shadow-sm flex flex-col justify-center items-center text-center">
+<span class="text-3xl font-manrope font-black text-tertiary">3.8</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mean Grade</span>
+</div>
+</div>
+</div>
+<!-- Grade Distribution Chart Preview (The "Editorial" Look) -->
+<div class="bg-surface-container-low p-8 rounded-full mb-12 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<span class="label-md font-bold text-slate-400 uppercase tracking-widest mb-2">Grade Distribution</span>
+<div class="flex gap-2">
+<div class="w-12 h-2 rounded-full bg-primary"></div>
+<div class="w-24 h-2 rounded-full bg-primary/60"></div>
+<div class="w-16 h-2 rounded-full bg-primary/30"></div>
+<div class="w-8 h-2 rounded-full bg-outline-variant"></div>
+</div>
+</div>
+<div class="h-10 w-px bg-outline-variant/30 mx-4"></div>
+<div class="flex gap-8">
+<div class="flex flex-col">
+<span class="text-xl font-manrope font-bold text-primary">12</span>
+<span class="text-[10px] uppercase text-slate-500 font-bold">Students</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xl font-manrope font-bold text-primary">02</span>
+<span class="text-[10px] uppercase text-slate-500 font-bold">In Review</span>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold text-sm px-6 py-2 rounded-full hover:bg-white transition-all">
+                Full Report <span class="material-symbols-outlined">north_east</span>
+</button>
+</div>
+<!-- Attendance & Grading Table Container -->
+<div class="bg-surface-container-lowest rounded-full overflow-hidden shadow-sm">
+<div class="p-8 bg-surface-container-low flex justify-between items-center">
+<h3 class="font-manrope text-xl font-bold">Student Cohort Roster</h3>
+<div class="flex gap-3">
+<div class="flex items-center bg-white px-4 py-2 rounded-xl border-outline-variant/20">
+<span class="material-symbols-outlined text-slate-400 text-sm mr-2">search</span>
+<input class="bg-transparent border-none text-sm focus:ring-0 p-0 w-48" placeholder="Search students..." type="text"/>
+</div>
+<button class="bg-white p-2 rounded-xl hover:bg-slate-50 border-outline-variant/20">
+<span class="material-symbols-outlined text-slate-600">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container/50 border-b border-outline-variant/10">
+<th class="px-8 py-5 label-md text-slate-500 font-bold uppercase tracking-widest">Student Information</th>
+<th class="px-6 py-5 label-md text-slate-500 font-bold uppercase tracking-widest">Today</th>
+<th class="px-6 py-5 label-md text-slate-500 font-bold uppercase tracking-widest text-center">Proposal</th>
+<th class="px-6 py-5 label-md text-slate-500 font-bold uppercase tracking-widest text-center">Literature</th>
+<th class="px-6 py-5 label-md text-slate-500 font-bold uppercase tracking-widest text-center">Methodology</th>
+<th class="px-8 py-5 label-md text-slate-500 font-bold uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Student Row 1 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Young male university student with glasses and a friendly smile, neutral studio lighting, high resolution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX5_ljTkIhTNj0Hg2mdX-1neQIPQJiwFCktvCmr-WxphbcqQ0zdwSuOZ-lBVi245vmBlc2-52nUnh8u25V3ymUEIdrbVDpQFQl1uY8U0E0A7NycZUk1-LBZORX-04Q3WXBXdUtlbd5KdI6tgEALgQWqNkZ1VI1tSxJyI98u_CfM8kehWNe5jU1YGUebaHk9K99tGqmTdwW4TUKrjpX5bZ0Ur-5jWPqL5B07U1vNQtwwSoS_TLx7KYhGmQJOYDLd0IJXnaW1ZhHqYkk"/>
+<div>
+<p class="font-manrope font-bold text-on-surface">Elena Rodriguez</p>
+<p class="text-xs text-slate-400 font-medium">ID: #AR-90122</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-6">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-6 h-6 bg-slate-200 rounded-lg peer peer-checked:bg-primary flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-white text-sm scale-0 peer-checked:scale-100 transition-transform">check</span>
+</div>
+</label>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-primary focus:bg-white focus:ring-1 focus:ring-primary/20" type="text" value="A-"/>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-slate-400 focus:bg-white focus:ring-1 focus:ring-primary/20" placeholder="-" type="text"/>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-slate-400 focus:bg-white focus:ring-1 focus:ring-primary/20" placeholder="-" type="text"/>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-all">
+<span class="material-symbols-outlined text-slate-400">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Student Row 2 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Young female student with a focused expression, wearing a minimalist sweater in a soft-lit academic library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPSLPltYy6gmxw-8LFrqRB_OnVakfO267YWoXlWWZWUWTB5PJx-2fiFqKVJMA23FxuE9aqpTofcM8CmXJWd7rI-QpjkCzX8SgCzTjmsty0BBfNgd3x6FjeASY5xJ-JKPTiwnkvTO1VFw25aRN5JYV-0dHunH4f3nJb0avL1j9SgEQ-XMBYpEM93_vvkTGyi-YnzmWbZ1nz-fS_eBedv7CdmS_GmYEWXFueUEWoDK64zrTSOq6uuCc-2LY5XdAiozooDfmK8pjSe64_"/>
+<div>
+<p class="font-manrope font-bold text-on-surface">Julian Thorne</p>
+<p class="text-xs text-slate-400 font-medium">ID: #AR-90145</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-6">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-6 h-6 bg-slate-200 rounded-lg peer peer-checked:bg-primary flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-white text-sm scale-0 peer-checked:scale-100 transition-transform">check</span>
+</div>
+</label>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-primary focus:bg-white focus:ring-1 focus:ring-primary/20" type="text" value="B+"/>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-primary focus:bg-white focus:ring-1 focus:ring-primary/20" type="text" value="A"/>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-slate-400 focus:bg-white focus:ring-1 focus:ring-primary/20" placeholder="-" type="text"/>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-all">
+<span class="material-symbols-outlined text-slate-400">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Student Row 3 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Young man with a modern haircut in a neutral grey t-shirt, academic campus background with blurred foliage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ1u0pRLpDB7XXdTJNeYh8tRW-2XhLX94yMNmfShAVbMyCCM9yNjzV8cgeLStsVinBk2KEZ3Gn06qnJRLo6yJzADMALS5MaDdRmh5B2ndOxK3QihEzP-GD779gM2ew_yaV5EN_4ArnINeivCLCSPhb9i_HkDaTNnGgMksUYK-K7Q633EydfgZxIwH70WQ9djLzWb96BWhNMbc8bL-anELPrxtcmst9clBKDiTanob0VsYwNRz6Lxm4_LkDXuF-b5e4JBGU7khjAc4r"/>
+<div>
+<p class="font-manrope font-bold text-on-surface">Maya Singh</p>
+<p class="text-xs text-slate-400 font-medium">ID: #AR-90188</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-6">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-6 h-6 bg-slate-200 rounded-lg peer peer-checked:bg-primary flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-white text-sm scale-0 peer-checked:scale-100 transition-transform">check</span>
+</div>
+</label>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-primary focus:bg-white focus:ring-1 focus:ring-primary/20" type="text" value="A"/>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-primary focus:bg-white focus:ring-1 focus:ring-primary/20" type="text" value="A-"/>
+</td>
+<td class="px-6 py-6 text-center">
+<input class="w-12 h-10 bg-surface-container text-center rounded-xl border-none font-bold text-primary focus:bg-white focus:ring-1 focus:ring-primary/20" type="text" value="B+"/>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-all">
+<span class="material-symbols-outlined text-slate-400">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-8 flex justify-between items-center bg-surface-container/20">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Showing 3 of 12 Students</span>
+<div class="flex gap-4">
+<button class="bg-primary px-8 py-3 rounded-xl text-on-primary font-manrope font-bold text-sm shadow-sm hover:scale-[1.02] active:opacity-80 transition-all">
+                        Save All Changes
+                    </button>
+</div>
+</div>
+</div>
+<!-- Asymmetrical Secondary Info Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+<!-- Deadline Reminder -->
+<div class="bg-tertiary-fixed-dim/10 p-8 rounded-full border border-tertiary-fixed/30 flex flex-col justify-between min-h-[200px]">
+<div>
+<span class="label-md font-bold text-tertiary-fixed-dim uppercase tracking-widest mb-2 block">Critical Deadline</span>
+<h4 class="text-2xl font-manrope font-extrabold text-on-tertiary-container">Literature Review Submission</h4>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-container">calendar_today</span>
+<span class="font-manrope font-bold text-on-tertiary-container">Friday, Oct 24th</span>
+</div>
+</div>
+<!-- Paper Stack Preview Component (Specialized Academic Component) -->
+<div class="md:col-span-2 bg-surface-container-low p-8 rounded-full relative overflow-hidden flex items-center">
+<div class="flex-grow">
+<h4 class="text-xl font-manrope font-bold mb-2">Draft Pending Review</h4>
+<p class="text-on-surface-variant body-md max-w-md">Elena Rodriguez submitted "Neural Networks in Archaeological Site Prediction" (v2.1). Needs feedback by tomorrow.</p>
+<button class="mt-4 secondary-container bg-secondary-container text-on-secondary-container px-6 py-2 rounded-full font-bold text-sm flex items-center gap-2 hover:bg-slate-300 transition-all">
+                        Open Document <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+<!-- Paper Stack Illustration -->
+<div class="flex -space-x-8 mr-4 opacity-50 lg:opacity-100">
+<div class="w-20 h-28 bg-white shadow-sm border border-outline-variant/10 rounded-lg -rotate-6"></div>
+<div class="w-20 h-28 bg-white shadow-md border border-outline-variant/10 rounded-lg -rotate-3 translate-y-2"></div>
+<div class="w-20 h-28 bg-white shadow-lg border border-outline-variant/10 rounded-lg translate-y-4 flex flex-col p-2">
+<div class="w-full h-1 bg-primary/10 mb-1"></div>
+<div class="w-2/3 h-1 bg-primary/10 mb-1"></div>
+<div class="w-full h-1 bg-primary/10"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB - Restricted to Top Level but here for "New Milestone" -->
+<!-- Suppressed on Details/Transactional as per rules, but this is a Dashboard-like workspace -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined">add</span>
+</button>
+</body></html>

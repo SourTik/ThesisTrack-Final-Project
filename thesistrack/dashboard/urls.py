@@ -9,6 +9,7 @@ urlpatterns = [
     path('student/', views.student_dashboard, name='student-dashboard'),
     path('supervisor/', views.supervisor_dashboard, name='supervisor-dashboard'),
     path('administrator/', views.admin_dashboard, name='admin-dashboard'),
+    path('deadlines/', views.deadlines_calendar, name='deadlines-calendar'),
     path('admin/reports/', views.admin_reports_home, name='admin-reports-home'),
     path('admin/reports/projects/', views.report_project_progress, name='admin-report-project-progress'),
     path('admin/reports/projects/export/csv/', views.export_project_progress_csv, name='admin-export-project-progress-csv'),

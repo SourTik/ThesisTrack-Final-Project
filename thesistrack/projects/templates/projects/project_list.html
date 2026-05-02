@@ -1,114 +1,32 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="space-y-8">
-    <div class="flex justify-between items-center">
+<div class="mx-auto max-w-7xl space-y-8">
+    <section class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-white">Your Projects</h1>
-            <p class="text-slate-400 mt-1">Manage your group, proposal, chapters, and reviews.</p>
+            <p class="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#800000]">Workspace / Active Research</p>
+            <h1 class="text-5xl font-black tracking-tight text-slate-950">Project Overview</h1>
+            <p class="mt-3 max-w-2xl text-base leading-7 text-slate-600">Manage your group, proposal, chapters, and reviews.</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3">
             {% if user.role == 'STUDENT' %}
-                <a href="{% url 'projects:create-group' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-bold transition-all border border-slate-700">
-                    Create Group
-                </a>
-                <a href="{% url 'projects:submit-project' %}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
-                    Submit Title
-                </a>
+                <a href="{% url 'projects:create-group' %}" class="rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-800 shadow-sm ring-1 ring-black/5">Create Group</a>
+                <a href="{% url 'projects:submit-project' %}" class="rounded-xl bg-[#800000] px-5 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(128,0,0,0.2)]">Submit Title</a>
             {% elif user.role == 'SUPERVISOR' %}
-                <a href="{% url 'dashboard:supervisor-dashboard' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-bold transition-all border border-slate-700">
-                    Supervisor Dashboard
-                </a>
-                <a href="{% url 'projects:supervisor-project-list' %}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
-                    Assigned Projects
-                </a>
+                <a href="{% url 'dashboard:supervisor-dashboard' %}" class="rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-800 shadow-sm ring-1 ring-black/5">Supervisor Dashboard</a>
+                <a href="{% url 'projects:supervisor-project-list' %}" class="rounded-xl bg-[#800000] px-5 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(128,0,0,0.2)]">Assigned Projects</a>
             {% endif %}
         </div>
-    </div>
+    </section>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {% for project in projects %}
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl hover:border-indigo-500/50 transition-all group relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-24 h-24 bg-indigo-500/5 blur-2xl rounded-full"></div>
-            
-            <span class="text-[10px] font-bold tracking-widest uppercase text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
-                {{ project.status|default:"Pending" }}
-            </span>
-            
-            <h3 class="text-xl font-bold text-white mt-4 group-hover:text-indigo-400 transition-colors">{{ project.title }}</h3>
-            <p class="text-slate-400 mt-2 text-sm line-clamp-2">{{ project.abstract }}</p>
-
-            <div class="mt-4 space-y-2 text-sm text-slate-400">
-                <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Group:</span> {% if project.group %}{{ project.group.name }}{% else %}Not assigned{% endif %}</p>
-                <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Members:</span> {% if project.group %}{{ project.group.member_count }}{% else %}0{% endif %}</p>
-                <p><span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Supervisor:</span> {% if project.supervisor %}{{ project.supervisor.username }}{% else %}Not assigned{% endif %}</p>
-                <p>
-                    <span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Title Decision:</span>
-                    {% if project.title_approved %}
-                        <span class="text-emerald-300 font-semibold">Accepted</span>
-                    {% elif project.status == 'TITLE_REJECTED' %}
-                        <span class="text-rose-300 font-semibold">Rejected</span>
-                    {% else %}
-                        <span class="text-amber-300 font-semibold">Pending</span>
-                    {% endif %}
-                </p>
-                {% with latest_submission=project.submissions.first %}
-                    <p>
-                        <span class="text-slate-500 uppercase font-semibold text-[10px] tracking-widest">Latest Chapter:</span>
-                        {% if latest_submission %}
-                            {% if latest_submission.status == 'APPROVED' %}
-                                <span class="text-emerald-300 font-semibold">Accepted</span>
-                            {% elif latest_submission.status == 'REJECTED' %}
-                                <span class="text-rose-300 font-semibold">Rejected</span>
-                            {% else %}
-                                <span class="text-amber-300 font-semibold">Pending Review</span>
-                            {% endif %}
-                            <span class="text-slate-500">({{ latest_submission.chapter.name|default:'Chapter' }} v{{ latest_submission.version }})</span>
-                        {% else %}
-                            <span class="text-slate-500">No chapter submitted yet</span>
-                        {% endif %}
-                    </p>
-                {% endwith %}
-            </div>
-            
-            <div class="mt-6 pt-6 border-t border-slate-800 flex justify-between items-center">
-                <span class="text-xs text-slate-500 uppercase font-semibold">Status: {{ project.get_status_display }}</span>
-                <div class="flex items-center gap-4 text-sm font-bold">
-                    {% if user.role == 'STUDENT' and project.title_approved and project.supervisor %}
-                        {% with latest_submission=project.submissions.first %}
-                            <a href="{% url 'projects:submit-document' project.id %}" class="text-indigo-400 hover:text-white">
-                                {% if latest_submission and latest_submission.status == 'REJECTED' %}
-                                    Upload New Version
-                                {% else %}
-                                    Upload Chapter
-                                {% endif %}
-                            </a>
-                        {% endwith %}
-                    {% endif %}
-                    {% if user.role == 'ADMIN' and not project.title_approved %}
-                        <a href="{% url 'projects:approve-project' project.id %}" class="text-indigo-400 hover:text-white">Approve Title</a>
-                        <a href="{% url 'projects:reject-project' project.id %}" class="text-rose-400 hover:text-white">Reject Title</a>
-                    {% endif %}
-                    {% if user.role == 'ADMIN' and project.title_approved and not project.supervisor %}
-                        <a href="{% url 'projects:assign-supervisor' project.id %}" class="text-indigo-400 hover:text-white">Assign Supervisor</a>
-                    {% endif %}
-                    {% if user.role == 'SUPERVISOR' and project.supervisor_id == user.id %}
-                        <a href="{% url 'projects:supervisor-project-detail' project.id %}" class="text-indigo-400 hover:text-white">Project Details</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+            {% include 'projects/_project_card.html' with project=project %}
         {% empty %}
-        <div class="col-span-full py-20 bg-slate-900/50 border border-dashed border-slate-800 rounded-3xl text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 mb-4 text-slate-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+            <div class="col-span-full rounded-3xl border border-dashed border-black/10 bg-white p-12 text-center text-slate-500 shadow-sm">
+                No projects available. Create a group first, then submit your title proposal.
             </div>
-            <h3 class="text-xl font-bold text-white">No projects available</h3>
-            <p class="text-slate-500 mt-2">Create a group first, then submit your title proposal.</p>
-        </div>
         {% endfor %}
-    </div>
+    </section>
 </div>
 {% endblock %}

@@ -2,13 +2,13 @@
 
 {% block report_content %}
 <form method="get" class="mb-3 flex items-center gap-2 text-sm">
-    <label for="days" class="text-slate-300">Inactivity Threshold (days)</label>
-    <input id="days" type="number" min="1" name="days" value="{{ days }}" class="w-24 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-300">
-    <button type="submit" class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white">Apply</button>
+    <label for="days" class="text-slate-600">Inactivity Threshold (days)</label>
+    <input id="days" type="number" min="1" name="days" value="{{ days }}" class="w-24 bg-white border border-black/10 rounded-xl px-3 py-2 text-slate-700">
+    <button type="submit" class="px-4 py-2 rounded-xl bg-[#800000] text-white font-semibold">Apply</button>
 </form>
-<div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900">
+<div class="overflow-x-auto rounded-3xl border border-black/5 bg-white shadow-sm">
     <table class="min-w-full text-sm">
-        <thead class="bg-slate-950 text-slate-400 uppercase text-xs">
+        <thead class="bg-slate-50 text-slate-400 uppercase text-xs">
             <tr>
                 <th class="px-4 py-3 text-left">Project</th>
                 <th class="px-4 py-3 text-left">Supervisor</th>
@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             {% for project in projects %}
-            <tr class="border-t border-slate-800 text-slate-300">
+            <tr class="border-t border-black/5 text-slate-700">
                 <td class="px-4 py-3">{{ project.title }}</td>
                 <td class="px-4 py-3">{{ project.supervisor.username|default:'Not assigned' }}</td>
                 <td class="px-4 py-3">{{ project.pending_submissions }}</td>

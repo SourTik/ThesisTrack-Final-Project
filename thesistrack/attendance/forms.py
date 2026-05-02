@@ -6,10 +6,10 @@ class StudentAttendanceForm(forms.ModelForm):
         model = StudentAttendance
         fields = ['student', 'date', 'status', 'remarks']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date', 'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
-            'student': forms.Select(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
-            'status': forms.Select(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
-            'remarks': forms.Textarea(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'rows': 3}),
+            'date': forms.DateInput(attrs={'type': 'date', 'class': 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10'}),
+            'student': forms.Select(attrs={'class': 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10'}),
+            'status': forms.Select(attrs={'class': 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10'}),
+            'remarks': forms.Textarea(attrs={'class': 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10', 'rows': 3}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -32,10 +32,10 @@ class SupervisorAttendanceForm(forms.ModelForm):
         model = SupervisorAttendance
         fields = ['supervisor', 'date', 'status', 'remarks']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date', 'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
-            'supervisor': forms.Select(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
-            'status': forms.Select(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'}),
-            'remarks': forms.Textarea(attrs={'class': 'w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500', 'rows': 3}),
+            'date': forms.DateInput(attrs={'type': 'date', 'class': 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10'}),
+            'supervisor': forms.Select(attrs={'class': 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10'}),
+            'status': forms.Select(attrs={'class': 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10'}),
+            'remarks': forms.Textarea(attrs={'class': 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10', 'rows': 3}),
         }
 
     def __init__(self, *args, **kwargs):

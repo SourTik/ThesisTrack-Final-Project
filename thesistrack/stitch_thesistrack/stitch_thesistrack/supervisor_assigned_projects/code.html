@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ThesisTrack | Supervisor Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#ffb4a8",
+                      "surface-bright": "#f9f9f9",
+                      "inverse-primary": "#ffb4a8",
+                      "outline": "#8e706b",
+                      "on-tertiary-fixed-variant": "#544600",
+                      "surface-variant": "#e2e2e2",
+                      "on-secondary-fixed": "#161d1f",
+                      "surface": "#f9f9f9",
+                      "on-secondary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#dde3e7",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-highest": "#e2e2e2",
+                      "on-tertiary-fixed": "#221b00",
+                      "surface-container-low": "#f3f3f3",
+                      "on-surface": "#1a1c1c",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#920703",
+                      "tertiary-container": "#c8a900",
+                      "surface-container-high": "#e8e8e8",
+                      "on-secondary-container": "#5d6467",
+                      "on-secondary-fixed-variant": "#41484b",
+                      "secondary-fixed-dim": "#c1c8cb",
+                      "outline-variant": "#e3beb8",
+                      "surface-dim": "#dadada",
+                      "secondary": "#585f62",
+                      "on-surface-variant": "#5a403c",
+                      "background": "#f9f9f9",
+                      "tertiary-fixed-dim": "#e9c400",
+                      "inverse-surface": "#2f3131",
+                      "secondary-container": "#dae1e4",
+                      "surface-tint": "#b52619",
+                      "surface-container": "#eeeeee",
+                      "primary-container": "#8b0000",
+                      "primary-fixed": "#ffdad4",
+                      "primary": "#610000",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed": "#410000",
+                      "on-background": "#1a1c1c",
+                      "on-primary-container": "#ff907f",
+                      "error-container": "#ffdad6",
+                      "on-primary": "#ffffff",
+                      "tertiary": "#705d00",
+                      "tertiary-fixed": "#ffe16d",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-container": "#4b3e00",
+                      "inverse-on-surface": "#f1f1f1"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "display": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand-font { font-family: 'Manrope', sans-serif; }
+        .glass-effect { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .academic-glow { box-shadow: 0 4px 20px rgba(26, 28, 28, 0.04), 0 12px 40px rgba(26, 28, 28, 0.06); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-72 fixed left-0 top-0 bg-zinc-100 dark:bg-zinc-950 py-8 space-y-2 z-50">
+<div class="px-8 mb-10">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div>
+<h2 class="font-['Manrope'] font-extrabold text-red-900 dark:text-red-500 leading-tight">The Curator</h2>
+<p class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Academic Workspace</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center text-zinc-500 dark:text-zinc-400 pl-10 py-3 hover:text-red-900 dark:hover:text-red-500 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">assignment</span>
+<span class="font-['Inter'] text-sm font-medium">My Project</span>
+</a>
+<a class="bg-white dark:bg-zinc-900 text-red-900 dark:text-red-400 font-bold rounded-l-full ml-4 pl-6 py-3 flex items-center transition-all" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">group_work</span>
+<span class="font-['Inter'] text-sm font-medium">Assigned Workspace</span>
+</a>
+<a class="flex items-center text-zinc-500 dark:text-zinc-400 pl-10 py-3 hover:text-red-900 dark:hover:text-red-500 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">admin_panel_settings</span>
+<span class="font-['Inter'] text-sm font-medium">Management Console</span>
+</a>
+<a class="flex items-center text-zinc-500 dark:text-zinc-400 pl-10 py-3 hover:text-red-900 dark:hover:text-red-500 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">rate_review</span>
+<span class="font-['Inter'] text-sm font-medium">Submission Review</span>
+</a>
+<a class="flex items-center text-zinc-500 dark:text-zinc-400 pl-10 py-3 hover:text-red-900 dark:hover:text-red-500 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">auto_graph</span>
+<span class="font-['Inter'] text-sm font-medium">Milestones</span>
+</a>
+</nav>
+<div class="px-8 mt-auto pt-6 space-y-1">
+<button class="w-full py-3 bg-gradient-to-br from-primary to-primary-container text-white rounded-xl font-bold text-sm mb-6 transition-all active:scale-95 shadow-lg">
+                Submit Thesis
+            </button>
+<a class="flex items-center text-zinc-500 dark:text-zinc-400 py-2 hover:text-red-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">help</span>
+<span class="text-sm font-medium">Help Center</span>
+</a>
+<a class="flex items-center text-zinc-500 dark:text-zinc-400 py-2 hover:text-red-900 transition-all" href="#">
+<span class="material-symbols-outlined mr-3">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-72 min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md sticky top-0 z-50 flex justify-between items-center w-full px-8 h-16 shadow-sm">
+<div class="flex items-center gap-8">
+<h1 class="text-2xl font-black tracking-tighter text-red-900 dark:text-red-500">ThesisTrack</h1>
+<nav class="hidden lg:flex gap-6">
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-red-900 font-['Manrope'] font-bold tracking-tight text-sm uppercase transition-all" href="#">Dashboard</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-red-900 font-['Manrope'] font-bold tracking-tight text-sm uppercase transition-all" href="#">Resources</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-red-900 font-['Manrope'] font-bold tracking-tight text-sm uppercase transition-all" href="#">Archive</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-surface-container-low px-4 py-2 rounded-full gap-2">
+<span class="material-symbols-outlined text-zinc-400">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48" placeholder="Search projects..." type="text"/>
+</div>
+<button class="material-symbols-outlined p-2 text-zinc-500 hover:bg-surface-container rounded-full transition-all">notifications</button>
+<button class="material-symbols-outlined p-2 text-zinc-500 hover:bg-surface-container rounded-full transition-all">settings</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-zinc-200 ml-2 cursor-pointer active:scale-95 transition-transform">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Professional profile portrait of an academic supervisor in a bright office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA36KwODkfjHvVRu4ht18oNnLusuaotembinLEDujTf9mpmhYUcO6JVaUBfOHOq2firbNomFaCQ4kcCjv5TXgng94Ondk-j5LcduoULwTshNQMwP7p0vyxNfDBHzWdnKYZtMdcGos8jRaAcnEA0T1WnBm6Hes3gOjBJJWipmLKQqm1ObsKZ9l7NwLvDKYvOkmSfWPvZd21cDl8TAE9QK7H_4cRoe9FKWSiZp76r9-l9mcKCsACSwF6hD__WQ9AJbQZRcSLpZ9V73i1h"/>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-[1600px] mx-auto">
+<!-- Hero Stats / Summary Section -->
+<div class="mb-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2">
+<h2 class="text-display-lg text-4xl font-black text-on-surface mb-2 tracking-tight">Supervisor Project Hub</h2>
+<p class="text-zinc-500 max-w-xl">Curate and manage ongoing research projects. Your editorial oversight ensures academic excellence and timely milestones.</p>
+</div>
+<div class="flex items-center justify-end gap-4">
+<div class="text-right">
+<p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Total Projects</p>
+<p class="text-3xl font-black text-primary leading-none">12</p>
+</div>
+<div class="h-10 w-px bg-outline-variant/30 mx-2"></div>
+<div class="text-right">
+<p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Pending Reviews</p>
+<p class="text-3xl font-black text-tertiary leading-none">05</p>
+</div>
+</div>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Assigned Projects List -->
+<section class="col-span-12 xl:col-span-8 space-y-8">
+<!-- Section Header -->
+<div class="flex justify-between items-end">
+<div>
+<span class="text-[10px] font-bold tracking-[0.2em] text-primary uppercase block mb-1">Active Research</span>
+<h3 class="text-2xl font-bold tracking-tight">Assigned Projects List</h3>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface-container-low rounded-lg text-xs font-bold hover:bg-surface-container transition-all">Filter</button>
+<button class="px-4 py-2 bg-surface-container-low rounded-lg text-xs font-bold hover:bg-surface-container transition-all">Export</button>
+</div>
+</div>
+<!-- Assigned Projects Table (Card Style) -->
+<div class="bg-surface-container-lowest rounded-xl academic-glow overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-zinc-500">Project Title</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-zinc-500">Group Name</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-zinc-500">Progress</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-zinc-500">Submissions</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-zinc-500 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<p class="font-bold text-sm text-on-surface">Neural Networks in Bio-Informatics</p>
+<p class="text-[10px] text-zinc-400 mt-0.5">Updated 2h ago</p>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-zinc-200"></div>
+<span class="text-sm font-medium text-secondary">The Synapse Squad</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-24 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 75%;"></div>
+</div>
+<span class="text-xs font-bold text-primary">75%</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-medium">08 Files</td>
+<td class="px-6 py-5 text-right">
+<button class="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full group-hover:bg-primary group-hover:text-white transition-all">View Project</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<p class="font-bold text-sm text-on-surface">Urban Heat Island Mitigation</p>
+<p class="text-[10px] text-zinc-400 mt-0.5">Updated 1d ago</p>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-zinc-200"></div>
+<span class="text-sm font-medium text-secondary">Green Horizon</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-24 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 40%;"></div>
+</div>
+<span class="text-xs font-bold text-tertiary">40%</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-medium">04 Files</td>
+<td class="px-6 py-5 text-right">
+<button class="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full group-hover:bg-primary group-hover:text-white transition-all">View Project</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<p class="font-bold text-sm text-on-surface">Post-Pandemic Hybrid Work Models</p>
+<p class="text-[10px] text-zinc-400 mt-0.5">Updated 4h ago</p>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-zinc-200"></div>
+<span class="text-sm font-medium text-secondary">Org Behavior Labs</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-24 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 92%;"></div>
+</div>
+<span class="text-xs font-bold text-primary">92%</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-medium">15 Files</td>
+<td class="px-6 py-5 text-right">
+<button class="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full group-hover:bg-primary group-hover:text-white transition-all">View Project</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Project Detail View -->
+<div class="bg-surface-container-lowest rounded-xl academic-glow p-8 space-y-8 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 bg-primary h-full"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h3 class="text-2xl font-black tracking-tight text-on-surface mb-2">Project Detail: Neural Networks in Bio-Informatics</h3>
+<div class="flex items-center gap-6">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-zinc-300"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-zinc-400"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-zinc-500"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-zinc-200 flex items-center justify-center text-[10px] font-bold">+2</div>
+</div>
+<span class="text-xs font-medium text-secondary">Current Status: <span class="text-primary font-bold">Iterative Refinement</span></span>
+</div>
+</div>
+<button class="px-6 py-2.5 bg-surface-container text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-zinc-200 transition-all">Message Group</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Chapter List -->
+<div>
+<h4 class="text-xs font-bold uppercase tracking-[0.15em] text-zinc-400 mb-4">Chapter Submissions</h4>
+<div class="space-y-3">
+<div class="p-4 bg-surface-container rounded-xl flex items-center justify-between group hover:bg-surface-container-high transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-zinc-400">description</span>
+<span class="text-sm font-medium">Chapter 1: Literature Review</span>
+</div>
+<span class="text-[10px] font-bold text-tertiary-container bg-tertiary-fixed px-2 py-1 rounded">APPROVED</span>
+</div>
+<div class="p-4 bg-surface-container rounded-xl flex items-center justify-between group hover:bg-surface-container-high transition-all cursor-pointer border-l-4 border-primary">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="text-sm font-bold">Chapter 2: Methodology (v3)</span>
+</div>
+<span class="text-[10px] font-bold text-white bg-primary px-2 py-1 rounded">PENDING</span>
+</div>
+<div class="p-4 bg-surface-container/50 rounded-xl flex items-center justify-between opacity-60">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">Chapter 3: Data Analysis</span>
+</div>
+<span class="material-symbols-outlined text-sm">lock</span>
+</div>
+</div>
+</div>
+<!-- Submission Review Panel -->
+<div class="bg-white rounded-xl academic-glow p-6 border-outline-variant/10 border">
+<div class="flex items-center justify-between mb-4">
+<h4 class="text-xs font-bold uppercase tracking-[0.15em] text-zinc-400">Review Panel</h4>
+<span class="text-[10px] font-bold px-3 py-1 bg-primary/10 text-primary rounded-full">ACTION REQUIRED</span>
+</div>
+<div class="aspect-video bg-zinc-100 rounded-lg flex flex-col items-center justify-center mb-4 text-zinc-400 border-2 border-dashed border-zinc-200">
+<span class="material-symbols-outlined text-4xl mb-2">picture_as_pdf</span>
+<p class="text-xs font-medium">Methodology_Draft_Final_v3.pdf</p>
+<p class="text-[10px] mt-1">2.4 MB • Click to preview</p>
+</div>
+<textarea class="w-full h-24 bg-surface-container-low border-none rounded-xl text-sm p-4 focus:ring-1 focus:ring-primary mb-4 resize-none" placeholder="Add feedback for the candidates..."></textarea>
+<div class="flex gap-3">
+<button class="flex-1 py-2 bg-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:opacity-90 transition-all">Approve</button>
+<button class="flex-1 py-2 bg-zinc-200 text-on-surface-variant text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-zinc-300 transition-all">Reject</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Feedback History -->
+<div class="space-y-6">
+<div>
+<span class="text-[10px] font-bold tracking-[0.2em] text-primary uppercase block mb-1">Curation Log</span>
+<h3 class="text-2xl font-bold tracking-tight">Feedback History</h3>
+</div>
+<div class="relative space-y-8 pl-8 before:content-[''] before:absolute before:left-3 before:top-0 before:bottom-0 before:w-px before:bg-outline-variant/40">
+<!-- Timeline Item -->
+<div class="relative">
+<div class="absolute -left-8 mt-1 w-6 h-6 rounded-full bg-tertiary-fixed flex items-center justify-center ring-4 ring-surface">
+<span class="material-symbols-outlined text-xs text-on-tertiary-fixed font-bold">check</span>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl academic-glow max-w-2xl">
+<div class="flex justify-between mb-2">
+<p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Oct 12, 2023 • Chapter 1 Approval</p>
+<span class="text-[10px] font-bold text-tertiary">v2.1</span>
+</div>
+<p class="text-sm text-secondary italic">"Literature review is robust. Please ensure the references follow the latest APA standards before final compilation."</p>
+</div>
+</div>
+<!-- Timeline Item -->
+<div class="relative">
+<div class="absolute -left-8 mt-1 w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center ring-4 ring-surface">
+<span class="material-symbols-outlined text-xs text-on-primary-fixed font-bold">close</span>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl academic-glow max-w-2xl">
+<div class="flex justify-between mb-2">
+<p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Oct 05, 2023 • Methodology Rejection</p>
+<span class="text-[10px] font-bold text-primary">v1.0</span>
+</div>
+<p class="text-sm text-secondary">"The sampling methodology lacks justification. Refer to the Smith &amp; Wesson (2019) paper for better structured qualitative metrics."</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Sidebar -->
+<aside class="col-span-12 xl:col-span-4 space-y-8">
+<!-- Pending Reviews Sidebar -->
+<div class="bg-surface-container-lowest rounded-xl academic-glow p-6 border-l-4 border-tertiary sticky top-24">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-sm font-bold uppercase tracking-[0.2em] text-on-surface">Pending Reviews</h3>
+<span class="w-6 h-6 rounded-full bg-tertiary text-on-tertiary text-[10px] flex items-center justify-center font-black">5</span>
+</div>
+<div class="space-y-4">
+<!-- Request Card -->
+<div class="p-4 bg-surface rounded-xl hover:bg-surface-container transition-all cursor-pointer group">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">Bio-Informatics</p>
+<p class="text-sm font-bold group-hover:text-primary transition-colors mb-2">Methodology_v3.pdf</p>
+<div class="flex items-center justify-between">
+<span class="text-[10px] text-zinc-500">Submitted 2h ago</span>
+<span class="material-symbols-outlined text-sm text-zinc-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Request Card -->
+<div class="p-4 bg-surface rounded-xl hover:bg-surface-container transition-all cursor-pointer group">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">Urban Mitigation</p>
+<p class="text-sm font-bold group-hover:text-primary transition-colors mb-2">Appendix_A_Survey.xlsx</p>
+<div class="flex items-center justify-between">
+<span class="text-[10px] text-zinc-500">Submitted 5h ago</span>
+<span class="material-symbols-outlined text-sm text-zinc-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Request Card -->
+<div class="p-4 bg-surface rounded-xl hover:bg-surface-container transition-all cursor-pointer group">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">Org Behavior</p>
+<p class="text-sm font-bold group-hover:text-primary transition-colors mb-2">Abstract_Draft_v2.docx</p>
+<div class="flex items-center justify-between">
+<span class="text-[10px] text-zinc-500">Submitted yesterday</span>
+<span class="material-symbols-outlined text-sm text-zinc-400 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-3 border border-outline-variant/30 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-surface-container transition-all">Review All Queue</button>
+</div>
+<!-- Visual Accent Card -->
+<div class="relative h-64 rounded-xl overflow-hidden academic-glow">
+<img class="w-full h-full object-cover" data-alt="Classic library bookshelves with dark wood and warm ambient lighting, scholarly atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0KNFb7qlLM9TwXxi3fgpBBQccpy9fka5dKsQOaAmFlmjfS0K9ShT1CpBhEWtgR70coj4Z7_AkpwyVrexU5F0_NVq3Sksxp9U4DF4WNsBEwwB-FZRJvPMfgNlecx0klTsfauq4Kr237YRH6YuIEZ1saWLB2tOeCnyTP1wgerRz4ois-_BZdgPzN7KY3kl-rNd5fGKncIVjn1u3mPCgjf3OpUsto6JsoQklp_14lSbvKYjnR0j-2Twll-1TtfgDg7UfbbaK2JMMnXQk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent p-6 flex flex-col justify-end">
+<h4 class="text-white font-bold text-lg leading-tight">Master Academic Excellence</h4>
+<p class="text-white/80 text-[10px] uppercase tracking-widest mt-2">Guidance • Integrity • Innovation</p>
+</div>
+</div>
+<!-- Academic Calendar/Milestones Summary -->
+<div class="bg-surface-container rounded-xl p-6">
+<h4 class="text-xs font-bold uppercase tracking-[0.15em] text-zinc-400 mb-4">Upcoming Milestones</h4>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-10 h-10 bg-white rounded-lg flex flex-col items-center justify-center text-primary border border-outline-variant/20">
+<span class="text-[10px] font-bold leading-none">OCT</span>
+<span class="text-lg font-black leading-none">24</span>
+</div>
+<div>
+<p class="text-xs font-bold">Mid-Term Assessment</p>
+<p class="text-[10px] text-zinc-500">All Project Phase 2 Due</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-10 h-10 bg-white rounded-lg flex flex-col items-center justify-center text-zinc-400 border border-outline-variant/20">
+<span class="text-[10px] font-bold leading-none">NOV</span>
+<span class="text-lg font-black leading-none">08</span>
+</div>
+<div>
+<p class="text-xs font-bold">Proposal Defenses</p>
+<p class="text-[10px] text-zinc-500">Main Conference Hall A</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Floating Action Button - Supressed as per guidelines for detail screens, but kept for main context if needed -->
+<!-- Supervisor often needs to add new notes or resources, but we prioritize the Canvas -->
+</body></html>

@@ -9,10 +9,34 @@ from .models import Notification
 @role_required(User.STUDENT, User.SUPERVISOR, User.ADMIN)
 def notification_list(request):
     notifications = Notification.objects.filter(user=request.user)
+
+    filter_state = request.GET.get('state', 'all')
+    category_filter = request.GET.get('category', 'all')
+
+    if filter_state == 'unread':
+        notifications = notifications.filter(is_read=False)
+    elif filter_state == 'read':
+        notifications = notifications.filter(is_read=True)
+
+    if category_filter != 'all':
+        notifications = notifications.filter(category=category_filter)
+
+    notification_total = Notification.objects.filter(user=request.user).count()
+    unread_total = Notification.objects.filter(user=request.user, is_read=False).count()
+    read_total = notification_total - unread_total
+
     return render(
         request,
         'notifications/notification_list.html',
-        {'notifications': notifications},
+        {
+            'notifications': notifications,
+            'filter_state': filter_state,
+            'category_filter': category_filter,
+            'filter_categories': Notification.CATEGORY_CHOICES,
+            'notification_total': notification_total,
+            'unread_total': unread_total,
+            'read_total': read_total,
+        },
     )
 
 

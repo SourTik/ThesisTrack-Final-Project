@@ -4,176 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThesisTrack</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); }
-        
-        /* Custom scrollbar for high-end aesthetic */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
-
-        /* Notification Pulse Animation */
-        .notification-pulse {
-            animation: pulse-red 2s infinite;
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(128, 0, 0, 0.06), transparent 32%),
+                radial-gradient(circle at top right, rgba(194, 153, 0, 0.08), transparent 24%),
+                #f7f6f2;
         }
+
+        h1, h2, h3, h4, .font-headline { font-family: 'Manrope', sans-serif; }
+        .nav-link { transition: all 0.2s ease; }
+        .glass-nav { backdrop-filter: blur(16px); }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #ece8e2; }
+        ::-webkit-scrollbar-thumb { background: #b9aea4; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8c8178; }
+
+        .notification-pulse { animation: pulse-red 2s infinite; }
         @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(128, 0, 0, 0.45); }
+            70% { box-shadow: 0 0 0 10px rgba(128, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(128, 0, 0, 0); }
         }
 
-        /* Smooth transitions for links */
-        .nav-link { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        details > summary {
+            list-style: none;
+        }
+
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
     </style>
 </head>
-<body class="bg-[#0f172a] text-slate-200 antialiased">
-    <div class="flex min-h-screen">
-        
+<body class="text-slate-900 antialiased">
+    <div class="min-h-screen">
         {% if user.is_authenticated %}
-        <aside class="w-72 bg-slate-950 border-r border-slate-800 flex flex-col fixed h-full z-20 shadow-2xl">
-            <div class="p-8">
-                <h1 class="text-2xl font-extrabold text-white tracking-tight">Thesis<span class="text-indigo-500">Track</span></h1>
-            </div>
-            
-            <nav class="flex-1 px-4 space-y-2">
-                <a href="{% url 'dashboard:home' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                    <i class="fa-solid fa-house mr-3 text-sm group-hover:scale-110 transition-transform"></i>
-                    <span class="font-medium">Dashboard</span>
-                </a>
-                <a href="{% url 'projects:project-list' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                    <i class="fa-solid fa-folder-open mr-3 text-sm group-hover:scale-110 transition-transform"></i>
-                    <span class="font-medium">Projects</span>
-                </a>
-                <a href="{% url 'attendance:attendance-list' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                    <i class="fa-solid fa-calendar-check mr-3 text-sm group-hover:scale-110 transition-transform"></i>
-                    <span class="font-medium">Attendance</span>
-                </a>
-                <a href="{% url 'notifications:list' %}" class="nav-link flex items-center justify-between px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                    <div class="flex items-center">
-                        <i class="fa-solid fa-bell mr-3 text-sm group-hover:scale-110 transition-transform"></i>
-                        <span class="font-medium">Notifications</span>
-                    </div>
-                    {% if unread_notifications_count > 0 %}
-                        <span class="bg-indigo-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-                            {{ unread_notifications_count }}
-                        </span>
-                    {% endif %}
-                </a>
-                <a href="{% url 'core:layout-preview' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                    <i class="fa-solid fa-layer-group mr-3 text-sm group-hover:scale-110 transition-transform"></i>
-                    <span class="font-medium">Layout Preview</span>
-                </a>
-                {% if user.role == 'ADMIN' or user.is_superuser %}
-                <a href="{% url 'accounts:create-user' %}" class="nav-link flex items-center px-4 py-3 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                    <i class="fa-solid fa-user-plus mr-3 text-sm group-hover:scale-110 transition-transform"></i>
-                    <span class="font-medium">Create User</span>
-                </a>
-                <div class="pt-4 mt-2 border-t border-slate-800/70">
-                    <p class="px-4 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">Reports</p>
-                    <a href="{% url 'dashboard:admin-report-project-progress' %}" class="nav-link flex items-center px-4 py-2.5 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                        <i class="fa-solid fa-chart-line mr-3 text-xs"></i>
-                        <span class="text-sm font-medium">Project Progress</span>
-                    </a>
-                    <a href="{% url 'dashboard:admin-report-submissions' %}" class="nav-link flex items-center px-4 py-2.5 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                        <i class="fa-solid fa-file-circle-check mr-3 text-xs"></i>
-                        <span class="text-sm font-medium">Submission & Approval</span>
-                    </a>
-                    <a href="{% url 'dashboard:admin-report-supervisors' %}" class="nav-link flex items-center px-4 py-2.5 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                        <i class="fa-solid fa-user-tie mr-3 text-xs"></i>
-                        <span class="text-sm font-medium">Supervisor Performance</span>
-                    </a>
-                    <a href="{% url 'dashboard:admin-report-groups' %}" class="nav-link flex items-center px-4 py-2.5 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                        <i class="fa-solid fa-users mr-3 text-xs"></i>
-                        <span class="text-sm font-medium">Group Performance</span>
-                    </a>
-                    <a href="{% url 'dashboard:admin-report-title-approvals' %}" class="nav-link flex items-center px-4 py-2.5 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                        <i class="fa-solid fa-heading mr-3 text-xs"></i>
-                        <span class="text-sm font-medium">Title Approval</span>
-                    </a>
-                    <a href="{% url 'dashboard:admin-report-system-activity' %}" class="nav-link flex items-center px-4 py-2.5 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                        <i class="fa-solid fa-chart-pie mr-3 text-xs"></i>
-                        <span class="text-sm font-medium">System Activity</span>
-                    </a>
-                    <a href="{% url 'dashboard:admin-report-stalled-projects' %}" class="nav-link flex items-center px-4 py-2.5 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                        <i class="fa-solid fa-hourglass-half mr-3 text-xs"></i>
-                        <span class="text-sm font-medium">Stalled Projects</span>
-                    </a>
-                    <a href="{% url 'dashboard:admin-report-defense-stage' %}" class="nav-link flex items-center px-4 py-2.5 text-slate-400 hover:bg-indigo-600/10 hover:text-indigo-400 rounded-xl group">
-                        <i class="fa-solid fa-gavel mr-3 text-xs"></i>
-                        <span class="text-sm font-medium">Defense Report</span>
-                    </a>
-                </div>
-                {% endif %}
-            </nav>
+            {% include 'core/_sidebar.html' %}
 
-            <div class="p-4 border-t border-slate-800">
-                <form action="{% url 'accounts:logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="w-full flex items-center px-4 py-3 text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all font-semibold group">
-                        <i class="fa-solid fa-right-from-bracket mr-3 group-hover:translate-x-1 transition-transform"></i>
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </aside>
+            <header class="fixed top-0 right-0 left-64 z-40 h-16 border-b border-black/5 bg-white/80 glass-nav shadow-[0_4px_24px_rgba(26,28,28,0.04)]">
+                <div class="h-full px-8 flex items-center justify-between gap-6">
+                    <!-- spacer so header actions sit to the right -->
+                    <div class="flex-1"></div>
+
+                    <div class="flex items-center gap-5">
+                        <details class="relative group">
+                            <summary class="relative flex cursor-pointer items-center justify-center rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#800000]">
+                                <i class="fa-regular fa-bell text-lg"></i>
+                                {% if unread_notifications_count > 0 %}
+                                    <span class="absolute -top-1 -right-1 flex h-4 w-4">
+                                        <span class="notification-pulse absolute inline-flex h-full w-full rounded-full bg-[#800000] opacity-75"></span>
+                                        <span class="relative inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#800000] text-[10px] font-bold text-white">
+                                            {{ unread_notifications_count }}
+                                        </span>
+                                    </span>
+                                {% endif %}
+                            </summary>
+
+                            <div class="absolute right-0 top-[calc(100%+0.75rem)] w-[22rem] overflow-hidden rounded-3xl border border-black/5 bg-white shadow-[0_24px_60px_rgba(26,28,28,0.12)]">
+                                <div class="flex items-center justify-between border-b border-black/5 px-5 py-4">
+                                    <div>
+                                        <p class="text-sm font-black text-slate-950">Recent Notifications</p>
+                                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Latest activity from your inbox</p>
+                                    </div>
+                                    {% if unread_notifications_count > 0 %}
+                                        <span class="rounded-full bg-[#800000] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-white">{{ unread_notifications_count }} unread</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="max-h-[24rem] overflow-y-auto">
+                                    {% for notification in recent_notifications %}
+                                        <a href="{% url 'notifications:list' %}" class="flex gap-3 border-b border-black/5 px-5 py-4 transition-colors hover:bg-slate-50 last:border-b-0">
+                                            <div class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl {% if notification.category == 'APPROVAL' %}bg-amber-100 text-amber-700{% elif notification.category == 'FEEDBACK' %}bg-sky-100 text-sky-700{% elif notification.category == 'DEADLINE' %}bg-rose-100 text-rose-700{% else %}bg-slate-100 text-slate-600{% endif %}">
+                                                <i class="fa-solid fa-bell text-sm"></i>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <div class="flex items-start justify-between gap-3">
+                                                    <p class="truncate text-sm font-bold text-slate-950">{{ notification.title }}</p>
+                                                    {% if not notification.is_read %}
+                                                        <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#800000]"></span>
+                                                    {% endif %}
+                                                </div>
+                                                    <p class="mt-1 text-sm leading-6 text-slate-600">{{ notification.message|truncatechars:120 }}</p>
+                                                <p class="mt-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">{{ notification.get_category_display }} · {{ notification.created_at|timesince }} ago</p>
+                                            </div>
+                                        </a>
+                                    {% empty %}
+                                        <div class="px-5 py-8 text-center text-sm text-slate-500">
+                                            No recent notifications.
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="border-t border-black/5 p-3">
+                                    <a href="{% url 'notifications:list' %}" class="flex items-center justify-center rounded-2xl bg-[#800000] px-4 py-3 text-sm font-bold text-white transition-transform hover:-translate-y-0.5">
+                                        Open inbox
+                                    </a>
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="flex items-center gap-3 border-l border-slate-200 pl-5">
+                            <div class="text-right leading-tight">
+                                <p class="text-sm font-bold text-slate-900">{{ user.get_full_name|default:user.username }}</p>
+                                <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#800000]">{{ user.role }}</p>
+                            </div>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-[#800000] text-sm font-bold text-white shadow-sm">
+                                {{ user.username|first|upper }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
         {% endif %}
 
-        <div class="flex-1 {% if user.is_authenticated %}ml-72{% endif %} flex flex-col">
-            
-            {% if user.is_authenticated %}
-            <nav class="h-20 glass border-b border-slate-800 flex items-center justify-between px-10 sticky top-0 z-10">
-                <div>
-                    <h2 class="text-slate-400 text-sm font-medium tracking-widest uppercase">System Overview</h2>
-                </div>
-                
-                <div class="flex items-center space-x-6">
-                    <div class="relative">
-                        <a href="{% url 'notifications:list' %}" class="text-slate-400 hover:text-white transition-colors duration-300">
-                            <i class="fa-regular fa-bell text-xl"></i>
-                            {% if unread_notifications_count > 0 %}
-                                <span class="absolute -top-1 -right-1 flex h-4 w-4">
-                                    <span class="notification-pulse absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-4 w-4 bg-rose-600 text-[10px] font-bold text-white items-center justify-center">
-                                        {{ unread_notifications_count }}
-                                    </span>
-                                </span>
-                            {% endif %}
-                        </a>
-                    </div>
-
-                    <div class="flex items-center space-x-4 border-l border-slate-800 pl-6">
-                        <div class="text-right">
-                            <p class="text-sm font-bold text-white">{{ user.username }}</p>
-                            <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-tighter">{{ user.role }}</p>
+        <main class="{% if user.is_authenticated %}ml-64 min-h-screen pt-20 px-8 pb-8{% else %}min-h-screen{% endif %}">
+            {% if messages %}
+                <div class="mx-auto mb-6 max-w-6xl space-y-3 {% if not user.is_authenticated %}px-6 pt-6{% endif %}">
+                    {% for message in messages %}
+                        <div class="rounded-2xl border border-[#800000]/15 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
+                            <i class="fa-solid fa-circle-info mr-2 text-[#800000]"></i>
+                            {{ message }}
                         </div>
-                        <div class="h-10 w-10 bg-indigo-600 rounded-full border-2 border-slate-800 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 transform hover:rotate-12 transition-transform cursor-pointer">
-                            {{ user.username|first|upper }}
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
-            </nav>
             {% endif %}
 
-            <main class="{% if user.is_authenticated %}p-10{% else %}p-0{% endif %} flex-1">
-                {% if messages %}
-                    <div class="max-w-4xl mx-auto mb-8 space-y-3">
-                        {% for message in messages %}
-                            <div class="p-4 bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 rounded-2xl text-sm flex items-center">
-                                <i class="fa-solid fa-circle-info mr-3"></i>
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                {% block content %}{% endblock %}
-            </main>
-        </div>
+            {% block content %}{% endblock %}
+        </main>
     </div>
 </body>
 </html>

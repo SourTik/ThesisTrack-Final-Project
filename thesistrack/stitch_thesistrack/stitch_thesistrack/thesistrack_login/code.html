@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ThesisTrack | Academic Curator Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#705d00",
+                        "inverse-surface": "#2f3131",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e2e2e2",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-fixed-variant": "#920703",
+                        "on-surface-variant": "#5a403c",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#dde3e7",
+                        "inverse-primary": "#ffb4a8",
+                        "on-secondary-fixed": "#161d1f",
+                        "on-background": "#1a1c1c",
+                        "error-container": "#ffdad6",
+                        "secondary": "#585f62",
+                        "surface-container": "#eeeeee",
+                        "tertiary-fixed": "#ffe16d",
+                        "primary-fixed": "#ffdad4",
+                        "surface": "#f9f9f9",
+                        "background": "#f9f9f9",
+                        "surface-container-low": "#f3f3f3",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#8b0000",
+                        "on-surface": "#1a1c1c",
+                        "on-tertiary-container": "#4b3e00",
+                        "surface-dim": "#dadada",
+                        "on-secondary-fixed-variant": "#41484b",
+                        "secondary-fixed-dim": "#c1c8cb",
+                        "on-primary-container": "#ff907f",
+                        "on-tertiary-fixed": "#221b00",
+                        "tertiary-fixed-dim": "#e9c400",
+                        "tertiary-container": "#c8a900",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#5d6467",
+                        "outline": "#8e706b",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-fixed-dim": "#ffb4a8",
+                        "outline-variant": "#e3beb8",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-tint": "#b52619",
+                        "primary": "#610000",
+                        "secondary-container": "#dae1e4",
+                        "on-tertiary-fixed-variant": "#544600",
+                        "on-primary-fixed": "#410000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f9;
+            color: #1a1c1c;
+        }
+        h1, h2, h3, .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+        .academic-gradient {
+            background: linear-gradient(135deg, #610000 0%, #8b0000 100%);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary-container selection:text-white">
+<!-- Auth Shell Navigation (Simplified/Transactional) -->
+<header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl h-16 px-8 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="account_balance">account_balance</span>
+<span class="text-xl font-bold tracking-tight text-primary">ThesisTrack</span>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">University Library</a>
+<a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Research Support</a>
+</div>
+</header>
+<main class="min-h-screen flex items-center justify-center relative overflow-hidden">
+<!-- Background Layer: Editorial Abstract Graphic -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-15 grayscale" data-alt="Interior of a grand classical university library with tall wooden shelves filled with antique books and soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnFaFBe3HNYKjKrbbHYxuXyJyCHcgejp8vHRAYqKJ6XMU-ddhe8wn1ZhuAjDf9jkz9A6OWk9yuLF3RfaCSDbt7WEoyGyv8RRBN1gkAtz1nDOkY32-CC-XOFFvDHb6utewfVn1349G9mPyIvbt3Rjvl7UPePRkCWJioNl2uLeS9fE0iQJKwUdKqKK4Ipu7KemSCxrBzQvtxFkZWCdCR2r_Z8nhGEd-DsfsbxOJ98u4ss9VpZrDl5npvlqlYUuQcKmsOvYQlERFWeMog"/>
+<div class="absolute inset-0 bg-gradient-to-br from-surface to-transparent opacity-80"></div>
+</div>
+<!-- Asymmetric Content Container -->
+<div class="container mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24">
+<!-- Left Side: Editorial Intro -->
+<div class="max-w-md text-center lg:text-left space-y-6">
+<div class="inline-flex items-center px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-bold uppercase tracking-[0.15em] rounded-full">
+                    Academic Curator
+                </div>
+<h1 class="text-5xl lg:text-7xl font-extrabold text-on-surface tracking-tight leading-none">
+                    Curating the <span class="text-primary">Future</span> of Research.
+                </h1>
+<p class="text-lg text-on-surface-variant leading-relaxed font-body">
+                    A prestigious workspace designed for deep focus and rigorous academic excellence. Manage your thesis journey with surgical precision.
+                </p>
+<div class="hidden lg:flex items-center gap-4 py-4">
+<div class="w-12 h-0.5 bg-outline-variant"></div>
+<span class="text-xs uppercase tracking-widest text-outline font-bold">Standard of Excellence</span>
+</div>
+</div>
+<!-- Right Side: Login Card -->
+<div class="w-full max-w-md">
+<div class="bg-surface-container-lowest rounded-xl p-8 lg:p-10 shadow-[0_4px_20px_rgba(26,28,28,0.04),0_12px_40px_rgba(26,28,28,0.06)] relative overflow-hidden">
+<!-- Top Accent Bar -->
+<div class="absolute top-0 left-0 w-full h-1 academic-gradient"></div>
+<div class="mb-10 text-center">
+<h2 class="text-2xl font-bold text-on-surface mb-2">Member Portal</h2>
+<p class="text-sm text-on-surface-variant">Access your academic track and feedback.</p>
+</div>
+<form class="space-y-6" onsubmit="return false;">
+<!-- ID Field -->
+<div class="space-y-2">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline-variant">University ID</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-xl" data-icon="badge">badge</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-xl text-on-surface placeholder:text-outline/50 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" placeholder="e.g. 2024-8890" type="text"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-outline-variant">Security Key</label>
+<a class="text-[10px] font-bold uppercase tracking-widest text-primary hover:text-primary-container" href="#">Forgot Password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-xl" data-icon="lock">lock</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-xl text-on-surface placeholder:text-outline/50 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<!-- CTA Button -->
+<button class="w-full academic-gradient text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 group" type="submit">
+<span>Secure Sign In</span>
+<span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Secondary Actions -->
+<div class="mt-10 pt-8 border-t-0 flex flex-col items-center gap-4">
+<div class="text-[10px] font-bold uppercase tracking-widest text-outline">New to ThesisTrack?</div>
+<button class="px-8 py-3 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold uppercase tracking-widest hover:bg-secondary-fixed transition-colors">
+                            Request Access
+                        </button>
+</div>
+</div>
+<!-- Accessibility/Legal Footer -->
+<div class="mt-8 flex justify-center gap-6">
+<a class="text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<span class="text-outline-variant">•</span>
+<a class="text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+<!-- Abstract Decorative Nodes -->
+<div class="absolute bottom-[-10%] left-[-5%] w-64 h-64 rounded-full bg-primary/5 blur-3xl z-0"></div>
+<div class="absolute top-[20%] right-[-10%] w-96 h-96 rounded-full bg-tertiary-fixed/10 blur-3xl z-0"></div>
+</main>
+<!-- Footer Copyright -->
+<footer class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 text-center">
+<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-outline opacity-40">
+            © 2024 ThesisTrack — The Academic Curator
+        </p>
+</footer>
+</body></html>

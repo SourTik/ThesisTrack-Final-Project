@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ThesisTrack | Supervisor Dashboard</title>
+<!-- Google Fonts: Manrope (Headline) and Inter (Body) -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#705d00",
+                    "inverse-surface": "#2f3131",
+                    "inverse-on-surface": "#f1f1f1",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e2e2e2",
+                    "surface-bright": "#f9f9f9",
+                    "on-primary-fixed-variant": "#920703",
+                    "on-surface-variant": "#5a403c",
+                    "on-error": "#ffffff",
+                    "secondary-fixed": "#dde3e7",
+                    "inverse-primary": "#ffb4a8",
+                    "on-secondary-fixed": "#161d1f",
+                    "on-background": "#1a1c1c",
+                    "error-container": "#ffdad6",
+                    "secondary": "#585f62",
+                    "surface-container": "#eeeeee",
+                    "tertiary-fixed": "#ffe16d",
+                    "primary-fixed": "#ffdad4",
+                    "surface": "#f9f9f9",
+                    "background": "#f9f9f9",
+                    "surface-container-low": "#f3f3f3",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-container": "#8b0000",
+                    "on-surface": "#1a1c1c",
+                    "on-tertiary-container": "#4b3e00",
+                    "surface-dim": "#dadada",
+                    "on-secondary-fixed-variant": "#41484b",
+                    "secondary-fixed-dim": "#c1c8cb",
+                    "on-primary-container": "#ff907f",
+                    "on-tertiary-fixed": "#221b00",
+                    "tertiary-fixed-dim": "#e9c400",
+                    "tertiary-container": "#c8a900",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#5d6467",
+                    "outline": "#8e706b",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e2e2e2",
+                    "primary-fixed-dim": "#ffb4a8",
+                    "outline-variant": "#e3beb8",
+                    "surface-container-high": "#e8e8e8",
+                    "surface-tint": "#b52619",
+                    "primary": "#610000",
+                    "secondary-container": "#dae1e4",
+                    "on-tertiary-fixed-variant": "#544600",
+                    "on-primary-fixed": "#410000"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body { font-family: 'Inter', sans-serif; }
+      h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-nav {
+        backdrop-filter: blur(12px);
+        background-color: rgba(249, 249, 249, 0.7);
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body">
+<!-- SideNavBar Shared Component -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-zinc-100 flex flex-col py-6 px-4 space-y-2 z-50">
+<div class="mb-8 px-2">
+<h1 class="font-black text-red-950 text-2xl tracking-tighter">ThesisTrack</h1>
+<p class="text-xs text-zinc-600 font-medium tracking-wide">The Academic Curator</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active State: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 bg-white text-red-900 shadow-sm rounded-lg font-semibold transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-zinc-200 transition-transform duration-200 hover:translate-x-1 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+<span class="text-sm">Submissions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-zinc-200 transition-transform duration-200 hover:translate-x-1 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="text-sm">Feedback</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-zinc-200 transition-transform duration-200 hover:translate-x-1 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-sm">Attendance</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 hover:bg-zinc-200 transition-transform duration-200 hover:translate-x-1 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-4">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Submission
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar Shared Component Logic -->
+<header class="fixed top-0 right-0 left-64 glass-nav h-16 px-8 flex justify-between items-center z-40 shadow-[0_4px_20px_rgba(26,28,28,0.04)]">
+<div class="flex items-center gap-4 bg-surface-container-low px-4 py-2 rounded-full w-96">
+<span class="material-symbols-outlined text-zinc-500" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full" placeholder="Search thesis records..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined text-zinc-600 cursor-pointer" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-tertiary-fixed rounded-full"></span>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">Dr. Alistair Vance</p>
+<p class="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold">Senior Supervisor</p>
+</div>
+<img alt="Academic profile photo" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/10" data-alt="Professional portrait of a middle-aged academic with glasses, studio lighting, neutral background, authoritative and warm expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxrhYUx2N0FCYiYIoBsoA664KBIrQosl0cLXAZ6K0lkrATmkX8knFEmzCoUiOrFbucXUGNS0hFrJpZGOTkTorkQW-ePSWwBOkttSf_xRk66NWf2KYaqk_zefqBvBfrRjEyc3gIRAjdyzd_bF38BNSt-EqZ8t48WVI_Hw1CtZ41zO5-QVtnmdQfX36YT4UHOzYgSFV6UC4Gd6rZ1-8uNssElnfRvfSZm_-Agj2lkv1hRArjnLGgSKJnLH_R506Y7qxrxhqhFhmoEi2o"/>
+</div>
+</div>
+</header>
+<section class="pt-24 px-8 pb-12">
+<!-- Dashboard Cover Header -->
+<div class="mb-12">
+<span class="label-md text-xs font-bold text-zinc-500 tracking-[0.2em] uppercase block mb-2">Faculty of Advanced Studies</span>
+<h2 class="text-5xl font-extrabold text-primary tracking-tight mb-4">Curator's Workspace</h2>
+<p class="text-zinc-600 max-w-2xl leading-relaxed">Overseeing 12 active candidates. Recent activity shows a 14% increase in draft submissions compared to the previous fortnight.</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Cohort Progress Monitoring (Large Bento Card) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl p-8 shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h3 class="headline-sm text-xl font-bold text-on-surface">Cohort Activity Trends</h3>
+<p class="text-sm text-zinc-500 mt-1">Submission frequency vs. Milestone completion</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-high rounded text-[10px] font-bold uppercase tracking-wider">Weekly</span>
+<span class="px-3 py-1 bg-primary text-white rounded text-[10px] font-bold uppercase tracking-wider">Monthly</span>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-4 px-4">
+<!-- Mockup Chart using DIVs -->
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-surface-container-low rounded-t-lg relative flex flex-col justify-end h-40">
+<div class="w-full bg-primary/20 h-1/2 rounded-t-lg"></div>
+<div class="w-full bg-primary h-1/4 rounded-t-lg"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400">Week 1</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-surface-container-low rounded-t-lg relative flex flex-col justify-end h-48">
+<div class="w-full bg-primary/20 h-2/3 rounded-t-lg"></div>
+<div class="w-full bg-primary h-1/3 rounded-t-lg"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400">Week 2</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-surface-container-low rounded-t-lg relative flex flex-col justify-end h-32">
+<div class="w-full bg-primary/20 h-1/3 rounded-t-lg"></div>
+<div class="w-full bg-primary h-1/6 rounded-t-lg"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400">Week 3</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-surface-container-low rounded-t-lg relative flex flex-col justify-end h-56">
+<div class="w-full bg-primary/20 h-3/4 rounded-t-lg"></div>
+<div class="w-full bg-primary h-1/2 rounded-t-lg"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400">Week 4</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1 group">
+<div class="w-full bg-surface-container-low rounded-t-lg relative flex flex-col justify-end h-44">
+<div class="w-full bg-primary/20 h-1/2 rounded-t-lg"></div>
+<div class="w-full bg-primary h-1/4 rounded-t-lg"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400">Week 5</span>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-3 border-t border-zinc-100 pt-6">
+<div class="text-center">
+<p class="text-2xl font-black text-primary">84%</p>
+<p class="text-[10px] uppercase tracking-widest font-bold text-zinc-500">Submission Rate</p>
+</div>
+<div class="text-center border-x border-zinc-100">
+<p class="text-2xl font-black text-tertiary">03</p>
+<p class="text-[10px] uppercase tracking-widest font-bold text-zinc-500">Milestones Met</p>
+</div>
+<div class="text-center">
+<p class="text-2xl font-black text-on-surface">12</p>
+<p class="text-[10px] uppercase tracking-widest font-bold text-zinc-500">Active Seats</p>
+</div>
+</div>
+</div>
+<!-- Recent Notifications (Side Bento Card) -->
+<div class="col-span-12 lg:col-span-4 bg-primary text-white rounded-xl p-8 shadow-xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="headline-sm text-xl font-bold">Urgent Reviews</h3>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed text-[10px] px-2 py-1 rounded font-black">NEW</span>
+</div>
+<div class="space-y-6">
+<div class="group cursor-pointer">
+<div class="flex justify-between mb-1">
+<span class="text-xs font-semibold opacity-70">Draft #4 Submission</span>
+<span class="text-[10px] opacity-50 uppercase">2m ago</span>
+</div>
+<p class="text-sm font-bold group-hover:underline">Elena Gilbert</p>
+<p class="text-xs opacity-60 line-clamp-1 italic">"Neural Networks in Archaeology..."</p>
+</div>
+<div class="group cursor-pointer">
+<div class="flex justify-between mb-1">
+<span class="text-xs font-semibold opacity-70">Proposal Re-upload</span>
+<span class="text-[10px] opacity-50 uppercase">1h ago</span>
+</div>
+<p class="text-sm font-bold group-hover:underline">Marcus Aurelius</p>
+<p class="text-xs opacity-60 line-clamp-1 italic">"Stoic Ethics in Modern UI..."</p>
+</div>
+<div class="group cursor-pointer">
+<div class="flex justify-between mb-1">
+<span class="text-xs font-semibold opacity-70">Meeting Request</span>
+<span class="text-[10px] opacity-50 uppercase">4h ago</span>
+</div>
+<p class="text-sm font-bold group-hover:underline">Sarah Connor</p>
+<p class="text-xs opacity-60 line-clamp-1 italic">"Automating the Future Defense..."</p>
+</div>
+</div>
+<button class="mt-8 w-full py-3 bg-white/10 hover:bg-white/20 transition-colors rounded-lg text-xs font-bold uppercase tracking-widest">View All Notifications</button>
+</div>
+<!-- Assigned Students & Proposal Actions -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-xl p-8 shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h3 class="headline-sm text-xl font-bold text-on-surface">Pending Proposals</h3>
+<div class="flex gap-4">
+<button class="text-zinc-400 hover:text-primary"><span class="material-symbols-outlined" data-icon="filter_list">filter_list</span></button>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Candidate Row -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-4">
+<img alt="Student" class="w-12 h-12 rounded-lg object-cover" data-alt="Close-up portrait of a female student with a bright smile, soft natural lighting, collegiate library blurred background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_3CXqKTRa7-6MvDc6MuMZlcBVRi9TVq-BIjKVJxAjQgR3VbR3cb5wz_fsvP3Aa-10kpvK0bxw0HT-XTRaeW3oYU_l4V5rRPxUZRCB4NrfMDTkGtr3qyvvTG69y8Sfz26OwI0IWMyG7abhSxJ3Gwyk8bHUFG_LlBnrSw_tHKlRCSQVHrXZpQMWJSbhYpDUcEfO3uBMSnDg1MCqQG0vz7EeNqteshkELjvXdTolvSNEzRcvXM68IyXcCpc9rBuqDl4RqUgoQTFw0c6k"/>
+<div>
+<h4 class="text-sm font-bold text-on-surface">Isabella Chen</h4>
+<p class="text-xs text-zinc-500">Milestone: Literature Review</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-black uppercase rounded-full">In Review</span>
+<button class="p-2 text-zinc-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl" data-icon="visibility">visibility</span></button>
+<button class="p-2 text-zinc-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl" data-icon="check_circle">check_circle</span></button>
+<button class="p-2 text-zinc-400 hover:text-error transition-colors"><span class="material-symbols-outlined text-xl" data-icon="cancel">cancel</span></button>
+</div>
+</div>
+<!-- Candidate Row -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary font-bold">JD</div>
+<div>
+<h4 class="text-sm font-bold text-on-surface">Jeremy Davis</h4>
+<p class="text-xs text-zinc-500">Milestone: Final Submission</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-3 py-1 bg-zinc-200 text-zinc-600 text-[10px] font-black uppercase rounded-full">Resubmission</span>
+<button class="p-2 text-zinc-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl" data-icon="visibility">visibility</span></button>
+<button class="p-2 text-zinc-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl" data-icon="check_circle">check_circle</span></button>
+<button class="p-2 text-zinc-400 hover:text-error transition-colors"><span class="material-symbols-outlined text-xl" data-icon="cancel">cancel</span></button>
+</div>
+</div>
+<!-- Candidate Row -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-4">
+<img alt="Student" class="w-12 h-12 rounded-lg object-cover" data-alt="Young male student in a modern workspace, wearing a casual sweater, focused and intellectual appearance, soft window light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgmlXUZOdq1wV8D7zOThwFCaYiam23y9DFRljvQsapHgu1CbwahllZauovusI87mIkWhFO_G6kHjqFk4m3lkd4Vl3KF9qMxmfQYqM6ED6AUMpkkOHbTGH1zUyuGUGrT85bml52jRA7-lSWuNPlNWzIfKY87E014gwvHGBO9C1ONqXjBZ7XC6iKDP30_eRf6KkDcES7WOdMijEcONhhogDyfgl1RYNSgSrlCMrcfBzTm6A_vlrwCEWD14WH7sqqTBomOlJ89gL1nxI_"/>
+<div>
+<h4 class="text-sm font-bold text-on-surface">Liam O'Connor</h4>
+<p class="text-xs text-zinc-500">Milestone: Data Analysis</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-3 py-1 bg-primary-container text-on-primary-container text-[10px] font-black uppercase rounded-full">Urgent</span>
+<button class="p-2 text-zinc-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl" data-icon="visibility">visibility</span></button>
+<button class="p-2 text-zinc-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl" data-icon="check_circle">check_circle</span></button>
+<button class="p-2 text-zinc-400 hover:text-error transition-colors"><span class="material-symbols-outlined text-xl" data-icon="cancel">cancel</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Feedback & Messaging UI -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-sm flex-1">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="history_edu">history_edu</span>
+<h3 class="headline-sm text-xl font-bold text-on-surface">Curator's Notes</h3>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4 mb-4">
+<div class="flex justify-between mb-2">
+<span class="text-[10px] font-black text-primary uppercase">To: Isabella Chen</span>
+<span class="text-[10px] text-zinc-400 uppercase">Yesterday</span>
+</div>
+<p class="text-sm text-zinc-700 leading-relaxed">The bibliography needs more recent sources (2020-2024) for the machine learning section. Please address before Friday.</p>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4 mb-6">
+<div class="flex justify-between mb-2">
+<span class="text-[10px] font-black text-zinc-500 uppercase">Isabella Chen</span>
+<span class="text-[10px] text-zinc-400 uppercase">10:45 AM</span>
+</div>
+<p class="text-sm text-zinc-700 leading-relaxed">Acknowledged. I've updated the draft with five new citations. Please re-examine.</p>
+</div>
+<div class="relative">
+<textarea class="w-full bg-surface-container-low border-none rounded-xl text-sm p-4 h-24 focus:ring-1 focus:ring-primary/20 resize-none" placeholder="Write feedback..."></textarea>
+<button class="absolute bottom-3 right-3 p-2 bg-primary text-white rounded-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Attendance Management Table -->
+<div class="col-span-12 bg-surface-container-lowest rounded-xl p-8 shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h3 class="headline-sm text-xl font-bold text-on-surface">Supervision Log</h3>
+<p class="text-sm text-zinc-500">Mandatory bi-weekly consultation tracking</p>
+</div>
+<button class="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest group">
+                            Export Log
+                            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="download">download</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="border-b border-zinc-100">
+<tr>
+<th class="pb-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Candidate</th>
+<th class="pb-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Last Meeting</th>
+<th class="pb-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Status</th>
+<th class="pb-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Next Scheduled</th>
+<th class="pb-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-zinc-50">
+<tr class="hover:bg-zinc-50/50 transition-colors">
+<td class="py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-xs font-bold text-zinc-500">IC</div>
+<span class="text-sm font-semibold">Isabella Chen</span>
+</div>
+</td>
+<td class="py-5 text-sm text-zinc-600">Oct 24, 2023</td>
+<td class="py-5">
+<span class="inline-flex items-center gap-1.5 text-[10px] font-black text-tertiary uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Compliant
+                                        </span>
+</td>
+<td class="py-5 text-sm text-zinc-600">Nov 07, 2023</td>
+<td class="py-5">
+<button class="text-xs font-bold text-primary hover:underline">Log Meeting</button>
+</td>
+</tr>
+<tr class="hover:bg-zinc-50/50 transition-colors">
+<td class="py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-xs font-bold text-zinc-500">JD</div>
+<span class="text-sm font-semibold">Jeremy Davis</span>
+</div>
+</td>
+<td class="py-5 text-sm text-zinc-600">Oct 12, 2023</td>
+<td class="py-5">
+<span class="inline-flex items-center gap-1.5 text-[10px] font-black text-error uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Overdue
+                                        </span>
+</td>
+<td class="py-5 text-sm text-zinc-600">Pending</td>
+<td class="py-5">
+<button class="text-xs font-bold text-primary hover:underline">Send Reminder</button>
+</td>
+</tr>
+<tr class="hover:bg-zinc-50/50 transition-colors">
+<td class="py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-xs font-bold text-zinc-500">LO</div>
+<span class="text-sm font-semibold">Liam O'Connor</span>
+</div>
+</td>
+<td class="py-5 text-sm text-zinc-600">Oct 29, 2023</td>
+<td class="py-5">
+<span class="inline-flex items-center gap-1.5 text-[10px] font-black text-tertiary uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Compliant
+                                        </span>
+</td>
+<td class="py-5 text-sm text-zinc-600">Nov 12, 2023</td>
+<td class="py-5">
+<button class="text-xs font-bold text-primary hover:underline">Log Meeting</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (FAB) - Contextually Suppressed on Subpages but shown on Home/Dashboard -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-2xl" data-icon="edit_square">edit_square</span>
+</button>
+</body></html>

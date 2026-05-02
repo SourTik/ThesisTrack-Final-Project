@@ -2,28 +2,28 @@
 
 {% block report_content %}
 <div class="grid gap-4 md:grid-cols-3 mb-4">
-    <div class="rounded-xl border border-emerald-900 bg-emerald-950/30 p-4">
-        <p class="text-xs text-emerald-300 uppercase">Approved</p>
-        <p class="text-2xl font-bold text-white">{{ summary.approved }}</p>
+    <div class="rounded-3xl border border-emerald-200 bg-emerald-50 p-5">
+        <p class="text-xs text-emerald-700 uppercase">Approved</p>
+        <p class="text-3xl font-black text-emerald-800">{{ summary.approved }}</p>
     </div>
-    <div class="rounded-xl border border-amber-900 bg-amber-950/30 p-4">
-        <p class="text-xs text-amber-300 uppercase">Pending</p>
-        <p class="text-2xl font-bold text-white">{{ summary.pending }}</p>
+    <div class="rounded-3xl border border-amber-200 bg-amber-50 p-5">
+        <p class="text-xs text-amber-700 uppercase">Pending</p>
+        <p class="text-3xl font-black text-amber-800">{{ summary.pending }}</p>
     </div>
-    <div class="rounded-xl border border-rose-900 bg-rose-950/30 p-4">
-        <p class="text-xs text-rose-300 uppercase">Rejected</p>
-        <p class="text-2xl font-bold text-white">{{ summary.rejected }}</p>
+    <div class="rounded-3xl border border-rose-200 bg-rose-50 p-5">
+        <p class="text-xs text-rose-700 uppercase">Rejected</p>
+        <p class="text-3xl font-black text-rose-800">{{ summary.rejected }}</p>
     </div>
 </div>
 <div class="mb-3 flex gap-2 text-xs font-bold uppercase tracking-wide">
-    <a href="{% url 'dashboard:admin-report-title-approvals' %}" class="px-3 py-1 rounded-full border {% if not state_filter %}border-slate-500 text-white{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">All</a>
-    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=approved" class="px-3 py-1 rounded-full border {% if state_filter == 'approved' %}border-emerald-500 text-emerald-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Approved</a>
-    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=pending" class="px-3 py-1 rounded-full border {% if state_filter == 'pending' %}border-amber-500 text-amber-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Pending</a>
-    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=rejected" class="px-3 py-1 rounded-full border {% if state_filter == 'rejected' %}border-rose-500 text-rose-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Rejected</a>
+    <a href="{% url 'dashboard:admin-report-title-approvals' %}" class="px-3 py-1 rounded-full {% if not state_filter %}bg-[#800000] text-white{% else %}bg-slate-100 text-slate-500 hover:bg-slate-200{% endif %}">All</a>
+    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=approved" class="px-3 py-1 rounded-full {% if state_filter == 'approved' %}bg-emerald-100 text-emerald-700{% else %}bg-slate-100 text-slate-500 hover:bg-slate-200{% endif %}">Approved</a>
+    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=pending" class="px-3 py-1 rounded-full {% if state_filter == 'pending' %}bg-amber-100 text-amber-700{% else %}bg-slate-100 text-slate-500 hover:bg-slate-200{% endif %}">Pending</a>
+    <a href="{% url 'dashboard:admin-report-title-approvals' %}?state=rejected" class="px-3 py-1 rounded-full {% if state_filter == 'rejected' %}bg-rose-100 text-rose-700{% else %}bg-slate-100 text-slate-500 hover:bg-slate-200{% endif %}">Rejected</a>
 </div>
-<div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900">
+<div class="overflow-x-auto rounded-3xl border border-black/5 bg-white shadow-sm">
     <table class="min-w-full text-sm">
-        <thead class="bg-slate-950 text-slate-400 uppercase text-xs">
+        <thead class="bg-slate-50 text-slate-400 uppercase text-xs">
             <tr>
                 <th class="px-4 py-3 text-left">Project</th>
                 <th class="px-4 py-3 text-left">Group</th>
@@ -33,7 +33,7 @@
         </thead>
         <tbody>
             {% for project in projects %}
-            <tr class="border-t border-slate-800 text-slate-300">
+            <tr class="border-t border-black/5 text-slate-700">
                 <td class="px-4 py-3">{{ project.title }}</td>
                 <td class="px-4 py-3">{{ project.group.name|default:'-' }}</td>
                 <td class="px-4 py-3">

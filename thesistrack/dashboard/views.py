@@ -1,5 +1,9 @@
 import csv
+import calendar
 from datetime import timedelta
+from datetime import datetime
+from collections import defaultdict
+from datetime import date
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -28,6 +32,9 @@ from core.decorators import role_required
 from attendance.models import StudentAttendance
 from notifications.models import Notification
 from projects.models import Feedback, Group, Project, Submission
+
+from .forms import ThesisDeadlineForm
+from .models import ThesisDeadline
 
 
 @login_required
@@ -63,6 +70,9 @@ def student_dashboard(request):
     )
     attendance_count = StudentAttendance.objects.filter(student=request.user, status='PRESENT').count()
     unread_notifications = Notification.objects.filter(user=request.user, is_read=False).count()
+    upcoming_deadlines = ThesisDeadline.objects.select_related('project', 'created_by').filter(
+        Q(project__group__members=request.user) | Q(project__supervisor=request.user) | Q(project__isnull=True)
+    ).order_by('due_date')[:5]
     return render(
         request,
         'dashboard/student_dashboard.html',
@@ -73,6 +83,7 @@ def student_dashboard(request):
             'latest_feedback': latest_feedback,
             'attendance_count': attendance_count,
             'unread_notifications': unread_notifications,
+            'upcoming_deadlines': upcoming_deadlines,
         },
     )
 
@@ -103,6 +114,9 @@ def supervisor_dashboard(request):
         .annotate(feedback_preview=Subquery(latest_feedback.values('comment')[:1]))
         .order_by('-reviewed_at', '-submitted_at')[:10]
     )
+    upcoming_deadlines = ThesisDeadline.objects.select_related('project', 'created_by').filter(
+        Q(project__supervisor=request.user) | Q(project__group__members=request.user) | Q(project__isnull=True)
+    ).order_by('due_date')[:5]
 
     return render(
         request,
@@ -114,21 +128,201 @@ def supervisor_dashboard(request):
             'recent_reviews': recent_reviews,
             'recent_submission_decisions': recent_submission_decisions,
             'status_filter': status_filter,
+            'upcoming_deadlines': upcoming_deadlines,
         },
     )
 
 
 @role_required(User.ADMIN)
 def admin_dashboard(request):
+    total_projects = Project.objects.count()
+    submitted_projects = Project.objects.filter(submissions__isnull=False).distinct().count()
+    submission_rate = (submitted_projects / total_projects * 100) if total_projects else 0
+
+    today = timezone.localdate()
+    window_days = 30
+    current_start = today - timedelta(days=window_days - 1)
+    previous_start = current_start - timedelta(days=window_days)
+
+    current_period_submissions = Submission.objects.filter(submitted_at__date__gte=current_start).count()
+    previous_period_submissions = Submission.objects.filter(
+        submitted_at__date__gte=previous_start,
+        submitted_at__date__lt=current_start,
+    ).count()
+
+    if previous_period_submissions == 0:
+        submission_rate_change = 100 if current_period_submissions > 0 else 0
+    else:
+        submission_rate_change = ((current_period_submissions - previous_period_submissions) / previous_period_submissions) * 100
+
+    trend_days = []
+    for offset in range(6, -1, -1):
+        day = today - timedelta(days=offset)
+        trend_days.append(
+            {
+                'day': day,
+                'count': Submission.objects.filter(submitted_at__date=day).count(),
+            }
+        )
+
+    max_count = max((item['count'] for item in trend_days), default=0)
+    for item in trend_days:
+        if max_count == 0:
+            item['height'] = 24
+        else:
+            item['height'] = max(24, round((item['count'] / max_count) * 100))
+
     stats = {
         'students': User.objects.filter(role=User.STUDENT).count(),
         'supervisors': User.objects.filter(role=User.SUPERVISOR).count(),
         'groups': Group.objects.count(),
-        'projects': Project.objects.count(),
+        'projects': total_projects,
         'pending_titles': Project.objects.filter(title_approved=False).count(),
         'pending_reviews': Submission.objects.filter(status=Submission.PENDING).count(),
     }
-    return render(request, 'dashboard/admin_dashboard.html', {'stats': stats})
+    recent_projects = (
+        Project.objects.select_related('group', 'supervisor')
+        .order_by('-updated_at')[:4]
+    )
+    recent_submissions = (
+        Submission.objects.select_related('project', 'chapter', 'uploaded_by')
+        .order_by('-submitted_at')[:5]
+    )
+    pending_defenses = ThesisDeadline.objects.filter(
+        deadline_type=ThesisDeadline.DEFENSE,
+        due_date__gte=today,
+    ).count()
+    next_deadline = (
+        ThesisDeadline.objects
+        .filter(due_date__gte=timezone.localdate())
+        .order_by('due_date')
+        .first()
+    )
+
+    critical_deadline_days = 0
+    critical_deadline_hours = 0
+    if next_deadline:
+        due_end_of_day = datetime.combine(next_deadline.due_date, datetime.max.time().replace(microsecond=0))
+        due_end_of_day = timezone.make_aware(due_end_of_day, timezone.get_current_timezone())
+        remaining = due_end_of_day - timezone.now()
+        if remaining.total_seconds() > 0:
+            critical_deadline_days = remaining.days
+            critical_deadline_hours = remaining.seconds // 3600
+
+    return render(
+        request,
+        'dashboard/admin_dashboard.html',
+        {
+            'stats': stats,
+            'recent_projects': recent_projects,
+            'recent_submissions': recent_submissions,
+            'submission_rate': submission_rate,
+            'submission_rate_change': submission_rate_change,
+            'submitted_projects': submitted_projects,
+            'submission_trend_days': trend_days,
+            'pending_defenses': pending_defenses,
+            'next_deadline': next_deadline,
+            'critical_deadline_days': critical_deadline_days,
+            'critical_deadline_hours': critical_deadline_hours,
+        },
+    )
+
+
+@role_required(User.STUDENT, User.SUPERVISOR, User.ADMIN)
+def deadlines_calendar(request):
+    today = timezone.localdate()
+    month = request.GET.get('month', str(today.month))
+    year = request.GET.get('year', str(today.year))
+
+    try:
+        month = int(month)
+        year = int(year)
+        if month < 1 or month > 12:
+            raise ValueError
+    except ValueError:
+        month = today.month
+        year = today.year
+
+    calendar_month = calendar.Calendar(firstweekday=0)
+    month_weeks_raw = calendar_month.monthdatescalendar(year, month)
+    month_start = date(year, month, 1)
+    last_day = calendar.monthrange(year, month)[1]
+    month_end = date(year, month, last_day)
+
+    deadlines = (
+        ThesisDeadline.objects.select_related('project', 'project__group', 'project__supervisor', 'created_by')
+        .filter(due_date__range=(month_start, month_end))
+        .order_by('due_date', 'title')
+    )
+    deadlines_by_date = defaultdict(list)
+    for deadline in deadlines:
+        deadlines_by_date[deadline.due_date].append(deadline)
+
+    previous_month = month - 1 or 12
+    previous_year = year - 1 if month == 1 else year
+    next_month = month + 1 if month < 12 else 1
+    next_year = year + 1 if month == 12 else year
+
+    deadline_form = None
+    if request.user.role == User.ADMIN or request.user.is_superuser:
+        if request.method == 'POST':
+            deadline_form = ThesisDeadlineForm(request.POST)
+            if deadline_form.is_valid():
+                deadline = deadline_form.save(commit=False)
+                deadline.created_by = request.user
+                deadline.save()
+
+                recipients = set()
+                if deadline.project and deadline.project.supervisor_id:
+                    recipients.add(deadline.project.supervisor_id)
+                if deadline.project and deadline.project.group_id:
+                    recipients.update(deadline.project.group.members.values_list('id', flat=True))
+
+                message = f'{deadline.get_deadline_type_display()} deadline for "{deadline.project.title if deadline.project else deadline.title}" is due on {deadline.due_date:%b %d, %Y}.'
+                for recipient_id in recipients:
+                    Notification.objects.create(
+                        user_id=recipient_id,
+                        sender=request.user,
+                        title=f'New deadline: {deadline.title}',
+                        message=message,
+                        category=Notification.DEADLINE,
+                    )
+
+                return redirect(f"{reverse('dashboard:deadlines-calendar')}?month={month}&year={year}")
+        else:
+            deadline_form = ThesisDeadlineForm()
+
+    prev_month_url = f"{reverse('dashboard:deadlines-calendar')}?month={previous_month}&year={previous_year}"
+    next_month_url = f"{reverse('dashboard:deadlines-calendar')}?month={next_month}&year={next_year}"
+
+    month_weeks = []
+    for week in month_weeks_raw:
+        rendered_week = []
+        for day in week:
+            rendered_week.append({
+                'day': day,
+                'is_current_month': day.month == month,
+                'deadlines': deadlines_by_date.get(day, []),
+            })
+        month_weeks.append(rendered_week)
+
+    return render(
+        request,
+        'dashboard/deadlines_calendar.html',
+        {
+            'deadline_form': deadline_form,
+            'deadlines': deadlines,
+            'month_weeks': month_weeks,
+            'current_month_name': calendar.month_name[month],
+            'current_month': month,
+            'current_year': year,
+            'prev_month_url': prev_month_url,
+            'next_month_url': next_month_url,
+            'month_start': month_start,
+            'month_end': month_end,
+            'upcoming_deadlines': ThesisDeadline.objects.select_related('project', 'created_by').filter(due_date__gte=today).order_by('due_date')[:6],
+        },
+    )
 
 
 def _report_nav_items():

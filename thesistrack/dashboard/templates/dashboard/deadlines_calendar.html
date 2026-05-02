@@ -1,0 +1,126 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="mx-auto max-w-7xl space-y-8">
+    <section class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div class="max-w-3xl">
+            <p class="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#800000]">Shared Academic Calendar</p>
+            <h1 class="text-5xl font-black tracking-tight text-slate-950">Deadlines Calendar</h1>
+            <p class="mt-3 text-base leading-7 text-slate-600">View thesis title, chapter, review, and defense deadlines. Only administrators can add new entries.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+            <a href="{{ prev_month_url }}" class="rounded-xl border border-black/5 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm hover:text-[#800000]">Previous</a>
+            <a href="{{ next_month_url }}" class="rounded-xl border border-black/5 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm hover:text-[#800000]">Next</a>
+        </div>
+    </section>
+
+    <section class="grid gap-6 xl:grid-cols-[1.35fr_0.85fr]">
+        <div class="space-y-6">
+            <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-950">{{ current_month_name }} {{ current_year }}</h2>
+                        <p class="mt-1 text-sm text-slate-500">Scheduled milestones and review points.</p>
+                    </div>
+                    <span class="rounded-full bg-[#800000] px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-white">Calendar</span>
+                </div>
+
+                <div class="mt-6 grid grid-cols-7 gap-2 text-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+
+                <div class="mt-3 space-y-2">
+                    {% for week in month_weeks %}
+                        <div class="grid grid-cols-7 gap-2">
+                            {% for cell in week %}
+                                <div class="min-h-28 rounded-2xl border border-black/5 p-3 {% if cell.is_current_month %}bg-white{% else %}bg-slate-50 text-slate-400{% endif %}">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-bold">{{ cell.day.day }}</p>
+                                    </div>
+                                    <div class="mt-2 space-y-2">
+                                        {% for deadline in cell.deadlines %}
+                                            <div class="rounded-xl px-2 py-2 text-[10px] font-bold uppercase tracking-[0.15em] {% if deadline.deadline_type == 'DEFENSE' %}bg-rose-100 text-rose-700{% elif deadline.deadline_type == 'REVIEW' %}bg-sky-100 text-sky-700{% elif deadline.deadline_type == 'CHAPTER' %}bg-amber-100 text-amber-700{% else %}bg-emerald-100 text-emerald-700{% endif %}">
+                                                {{ deadline.get_deadline_type_display }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+                <h2 class="text-xl font-bold text-slate-950">Upcoming Deadlines</h2>
+                <div class="mt-5 space-y-3">
+                    {% for deadline in upcoming_deadlines %}
+                        <article class="rounded-2xl bg-slate-50 p-4 ring-1 ring-black/5">
+                            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{{ deadline.get_deadline_type_display }}</p>
+                                    <p class="mt-1 font-semibold text-slate-950">{{ deadline.title }}</p>
+                                    <p class="mt-1 text-sm text-slate-500">{% if deadline.project %}{{ deadline.project.title }}{% else %}General academic milestone{% endif %}</p>
+                                </div>
+                                <p class="text-sm font-bold text-[#800000]">{{ deadline.due_date|date:'M d, Y' }}</p>
+                            </div>
+                        </article>
+                    {% empty %}
+                        <p class="text-sm text-slate-500">No deadlines scheduled yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+                <h2 class="text-xl font-bold text-slate-950">Deadline Types</h2>
+                <div class="mt-4 space-y-3 text-sm text-slate-600">
+                    <div class="rounded-2xl bg-emerald-50 px-4 py-3">Thesis Title</div>
+                    <div class="rounded-2xl bg-amber-50 px-4 py-3">Chapter Milestone</div>
+                    <div class="rounded-2xl bg-sky-50 px-4 py-3">Thesis Review</div>
+                    <div class="rounded-2xl bg-rose-50 px-4 py-3">Thesis Defence</div>
+                </div>
+            </div>
+
+            {% if deadline_form %}
+                <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+                    <h2 class="text-xl font-bold text-slate-950">Add Deadline</h2>
+                    <p class="mt-1 text-sm text-slate-500">Admins can create deadlines for title, chapter, review, and defense stages.</p>
+                    <form method="post" class="mt-6 space-y-4">
+                        {% csrf_token %}
+                        {% for field in deadline_form %}
+                            <div class="space-y-2">
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-800">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <p class="text-xs text-slate-500">{{ field.help_text }}</p>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <p class="text-sm text-rose-600">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        {% if deadline_form.non_field_errors %}
+                            <div class="rounded-2xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">
+                                {% for error in deadline_form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="w-full rounded-xl bg-[#800000] px-5 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(128,0,0,0.18)]">
+                            Save Deadline
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

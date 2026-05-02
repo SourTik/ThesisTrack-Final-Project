@@ -1,0 +1,58 @@
+<article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+    <div class="flex items-start justify-between gap-3">
+        <span class="rounded-full bg-slate-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">{{ project.get_status_display|default:project.status }}</span>
+    </div>
+
+    <h2 class="mt-4 text-2xl font-black tracking-tight text-slate-950">{{ project.title }}</h2>
+    <p class="mt-2 text-sm leading-6 text-slate-600">{{ project.abstract }}</p>
+
+    <div class="mt-5 space-y-2 text-sm text-slate-600">
+        <p><span class="font-bold uppercase tracking-[0.2em] text-slate-400">Group:</span> {% if project.group %}{{ project.group.name }}{% else %}Not assigned{% endif %}</p>
+        <p><span class="font-bold uppercase tracking-[0.2em] text-slate-400">Members:</span> {% if project.group %}{{ project.group.member_count }}{% else %}0{% endif %}</p>
+        <p><span class="font-bold uppercase tracking-[0.2em] text-slate-400">Supervisor:</span> {% if project.supervisor %}{{ project.supervisor.username }}{% else %}Not assigned{% endif %}</p>
+        <p>
+            <span class="font-bold uppercase tracking-[0.2em] text-slate-400">Title Decision:</span>
+            {% if project.title_approved %}
+                <span class="font-semibold text-emerald-700">Accepted</span>
+            {% elif project.status == 'TITLE_REJECTED' %}
+                <span class="font-semibold text-rose-700">Rejected</span>
+            {% else %}
+                <span class="font-semibold text-amber-700">Pending</span>
+            {% endif %}
+        </p>
+        {% with latest_submission=project.submissions.first %}
+            <p>
+                <span class="font-bold uppercase tracking-[0.2em] text-slate-400">Latest Chapter:</span>
+                {% if latest_submission %}
+                    {% if latest_submission.status == 'APPROVED' %}<span class="font-semibold text-emerald-700">Accepted</span>{% elif latest_submission.status == 'REJECTED' %}<span class="font-semibold text-rose-700">Rejected</span>{% else %}<span class="font-semibold text-amber-700">Pending Review</span>{% endif %}
+                    <span class="text-slate-500">({{ latest_submission.chapter.name|default:'Chapter' }} v{{ latest_submission.version }})</span>
+                {% else %}
+                    <span class="text-slate-500">No chapter submitted yet</span>
+                {% endif %}
+            </p>
+        {% endwith %}
+    </div>
+
+    <div class="mt-6 flex items-center justify-between border-t border-black/5 pt-4 text-sm font-bold">
+        <span class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Status: {{ project.get_status_display }}</span>
+        <div class="flex items-center gap-4">
+            {% if user.role == 'STUDENT' and project.title_approved and project.supervisor %}
+                {% with latest_submission=project.submissions.first %}
+                    <a href="{% url 'projects:submit-document' project.id %}" class="text-[#800000] hover:underline">
+                        {% if latest_submission and latest_submission.status == 'REJECTED' %}Upload New Version{% else %}Upload Chapter{% endif %}
+                    </a>
+                {% endwith %}
+            {% endif %}
+            {% if user.role == 'ADMIN' and not project.title_approved %}
+                <a href="{% url 'projects:approve-project' project.id %}" class="text-[#800000] hover:underline">Approve Title</a>
+                <a href="{% url 'projects:reject-project' project.id %}" class="text-rose-700 hover:underline">Reject Title</a>
+            {% endif %}
+            {% if user.role == 'ADMIN' and project.title_approved and not project.supervisor %}
+                <a href="{% url 'projects:assign-supervisor' project.id %}" class="text-[#800000] hover:underline">Assign Supervisor</a>
+            {% endif %}
+            {% if user.role == 'SUPERVISOR' and project.supervisor_id == user.id %}
+                <a href="{% url 'projects:supervisor-project-detail' project.id %}" class="text-[#800000] hover:underline">Project Details</a>
+            {% endif %}
+        </div>
+    </div>
+</article>

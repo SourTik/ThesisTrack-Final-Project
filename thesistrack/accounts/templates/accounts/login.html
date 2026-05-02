@@ -1,48 +1,54 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-[#0f172a] p-6">
-    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden">
-        <div class="p-8">
-            <div class="text-center mb-10">
-                <h1 class="text-3xl font-extrabold text-white tracking-tight">Thesis<span class="text-indigo-500">Track</span></h1>
-                <p class="text-slate-400 mt-2 text-sm">Sign in to manage your research</p>
+<div class="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(128,0,0,0.08),transparent_35%),radial-gradient(circle_at_right,rgba(194,153,0,0.08),transparent_20%),#f7f6f2]">
+    <div class="grid min-h-screen lg:grid-cols-[1.15fr_0.85fr]">
+        <section class="hidden items-end px-10 py-12 lg:flex">
+            <div class="max-w-xl">
+                <p class="mb-4 inline-flex rounded-full bg-[#800000]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.25em] text-[#800000]">Academic Curator</p>
+                <h1 class="text-6xl font-black tracking-tight text-slate-950">Curating the <span class="text-[#800000]">Future</span> of Research.</h1>
+                <p class="mt-6 max-w-lg text-lg leading-8 text-slate-600">A prestigious workspace designed for deep focus and rigorous academic excellence. Manage your thesis journey with surgical precision.</p>
             </div>
+        </section>
 
-            <form method="post" class="space-y-6">
-                {% csrf_token %}
-                
-                {% if form.errors %}
-                <div class="bg-rose-500/10 border border-rose-500/50 text-rose-500 p-3 rounded-xl text-xs">
-                    Invalid username or password.
-                </div>
-                {% endif %}
-
-                <div>
-                    <label class="block text-slate-300 text-sm font-semibold mb-2 ml-1">Username</label>
-                    <input type="text" name="username" required
-                        class="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+        <section class="flex items-center justify-center px-6 py-10 lg:px-10">
+            <div class="w-full max-w-md rounded-[2rem] bg-white p-8 shadow-[0_24px_60px_rgba(26,28,28,0.08)] ring-1 ring-black/5">
+                <div class="mb-8 text-center">
+                    <h1 class="text-3xl font-black tracking-tight text-slate-950">Member Portal</h1>
+                    <p class="mt-2 text-sm text-slate-500">Access your academic track and feedback.</p>
                 </div>
 
-                <div>
-                    <label class="block text-slate-300 text-sm font-semibold mb-2 ml-1">Password</label>
-                    <input type="password" name="password" required
-                        class="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                <form method="post" class="space-y-5">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">Invalid username or password.</div>
+                    {% endif %}
+
+                    <div>
+                        <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">University ID</label>
+                        <input type="text" name="username" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10" placeholder="e.g. 2024-8890">
+                    </div>
+
+                    <div>
+                        <div class="mb-2 flex items-center justify-between">
+                            <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Security Key</label>
+                            <a href="#" class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#800000]">Forgot password?</a>
+                        </div>
+                        <input type="password" name="password" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#800000] focus:ring-2 focus:ring-[#800000]/10" placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="w-full rounded-2xl bg-[#800000] px-4 py-3.5 text-sm font-bold text-white shadow-[0_12px_24px_rgba(128,0,0,0.22)]">
+                        Secure Sign In
+                    </button>
+                </form>
+
+                <div class="mt-10 text-center">
+                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">New to ThesisTrack?</p>
+                    <button type="button" class="mt-3 rounded-2xl bg-slate-200 px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-600">Request Access</button>
+                    <p class="mt-8 text-[10px] uppercase tracking-[0.2em] text-slate-400">Privacy Policy · Terms of Service</p>
                 </div>
-
-                <button type="submit" 
-                    class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:-translate-y-0.5">
-                    Sign In
-                </button>
-            </form>
-
-            <div class="mt-8 text-center">
-                <p class="text-slate-500 text-xs">
-                    <span class="block">Administrator access only.</span>
-                    Account creation is handled by the university department.
-                </p>
             </div>
-        </div>
+        </section>
     </div>
 </div>
-{% endblock %}s
+{% endblock %}

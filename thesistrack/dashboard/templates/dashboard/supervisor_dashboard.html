@@ -1,93 +1,153 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="space-y-8">
-    <div class="flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-white">Supervisor Dashboard</h1>
-            <p class="text-slate-400 mt-1">Review submissions, approvals, and group progress.</p>
+<div class="mx-auto max-w-7xl space-y-8">
+    <section class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div class="max-w-3xl">
+            <p class="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#800000]">Faculty of Advanced Studies</p>
+            <h1 class="text-5xl font-black tracking-tight text-slate-950">Curator's Workspace</h1>
+            <p class="mt-3 max-w-2xl text-base leading-7 text-slate-600">Overseeing 12 active candidates. Recent activity shows a rise in draft submissions compared to the previous fortnight.</p>
         </div>
-        <a href="{% url 'projects:supervisor-project-list' %}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-3 rounded-xl font-bold">
+        <a href="{% url 'projects:supervisor-project-list' %}" class="rounded-xl bg-[#800000] px-5 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(128,0,0,0.2)]">
             View Assigned Projects
         </a>
-    </div>
+    </section>
 
-    <div class="grid gap-6 md:grid-cols-4">
-        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Supervised Projects</p>
-            <p class="mt-2 text-2xl font-bold text-white">{{ supervised_projects }}</p>
+    <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Supervised Projects</p>
+            <p class="mt-3 text-4xl font-black text-slate-950">{{ supervised_projects }}</p>
         </div>
-        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Pending Reviews</p>
-            <p class="mt-2 text-2xl font-bold text-white">{{ pending_reviews }}</p>
+        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Pending Reviews</p>
+            <p class="mt-3 text-4xl font-black text-slate-950">{{ pending_reviews }}</p>
         </div>
-        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Notifications</p>
-            <p class="mt-2 text-2xl font-bold text-white">{{ unread_notifications }}</p>
+        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Notifications</p>
+            <p class="mt-3 text-4xl font-black text-slate-950">{{ unread_notifications }}</p>
         </div>
-        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <p class="text-xs uppercase tracking-widest text-slate-500">Recent Reviews</p>
-            <p class="mt-2 text-2xl font-bold text-white">{{ recent_reviews|length }}</p>
-        </div>
-    </div>
-
-    <section class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-        <h2 class="text-lg font-bold text-white">Recently Reviewed Submissions</h2>
-        <div class="mt-4 space-y-3">
-            {% for review in recent_reviews %}
-            <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
-                <p class="text-white font-semibold">{{ review.submission.project.title }}</p>
-                <p class="text-sm text-slate-400 mt-1">{{ review.submission.chapter.name|default:'Unknown Chapter' }} · Version {{ review.submission.version }}</p>
-                <p class="text-xs text-slate-500 mt-1">{{ review.created_at|date:'M d, Y H:i' }}</p>
-            </div>
-            {% empty %}
-            <p class="text-slate-500">No reviews submitted yet.</p>
-            {% endfor %}
+        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Recent Reviews</p>
+            <p class="mt-3 text-4xl font-black text-slate-950">{{ recent_reviews|length }}</p>
         </div>
     </section>
 
-    <section class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-            <h2 class="text-lg font-bold text-white">Recent Submission Decisions</h2>
-            <div class="flex flex-wrap gap-2 text-xs font-bold uppercase tracking-wide">
-                <a href="{% url 'dashboard:supervisor-dashboard' %}" class="px-3 py-1 rounded-full border {% if not status_filter %}border-slate-500 text-white{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">All</a>
-                <a href="{% url 'dashboard:supervisor-dashboard' %}?status=PENDING" class="px-3 py-1 rounded-full border {% if status_filter == 'PENDING' %}border-amber-500 text-amber-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Pending</a>
-                <a href="{% url 'dashboard:supervisor-dashboard' %}?status=APPROVED" class="px-3 py-1 rounded-full border {% if status_filter == 'APPROVED' %}border-emerald-500 text-emerald-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Approved</a>
-                <a href="{% url 'dashboard:supervisor-dashboard' %}?status=REJECTED" class="px-3 py-1 rounded-full border {% if status_filter == 'REJECTED' %}border-rose-500 text-rose-300{% else %}border-slate-700 text-slate-400 hover:text-white{% endif %}">Rejected</a>
+    <section class="grid gap-6 xl:grid-cols-[1.4fr_0.85fr]">
+        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-950">Cohort Activity Trends</h2>
+                    <p class="mt-1 text-sm text-slate-500">Submission frequency vs. milestone completion.</p>
+                </div>
+                <div class="flex gap-2 text-[10px] font-black uppercase tracking-[0.2em]">
+                    <span class="rounded px-2 py-1 bg-slate-100 text-slate-500">Weekly</span>
+                    <span class="rounded px-2 py-1 bg-[#800000] text-white">Monthly</span>
+                </div>
+            </div>
+            <div class="mt-8 grid h-64 grid-cols-5 items-end gap-4">
+                <div class="rounded-t-xl bg-slate-200 h-[55%]"></div>
+                <div class="rounded-t-xl bg-slate-300 h-[72%]"></div>
+                <div class="rounded-t-xl bg-slate-200 h-[45%]"></div>
+                <div class="rounded-t-xl bg-slate-300 h-[82%]"></div>
+                <div class="rounded-t-xl bg-[#800000] h-[60%]"></div>
+            </div>
+            <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <p class="text-2xl font-black text-[#800000]">84%</p>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Submission Rate</p>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-950">03</p>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Milestones Met</p>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-950">12</p>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Active Seats</p>
+                </div>
             </div>
         </div>
 
-        <div class="mt-4 space-y-3">
-            {% for submission in recent_submission_decisions %}
-            <article class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
-                <div class="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                        <p class="text-white font-semibold">{{ submission.project.title }}</p>
-                        <p class="text-sm text-slate-400 mt-1">{{ submission.chapter.name|default:'Unknown Chapter' }} · Version {{ submission.version }}</p>
-                        <p class="text-xs text-slate-500 mt-1">
-                            {% if submission.reviewed_at %}
-                                Reviewed {{ submission.reviewed_at|date:'M d, Y H:i' }}
-                            {% else %}
-                                Not reviewed yet
-                            {% endif %}
-                        </p>
+        <div class="rounded-3xl bg-[#800000] p-6 text-white shadow-[0_18px_40px_rgba(128,0,0,0.18)]">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold">Urgent Reviews</h2>
+                <span class="rounded-full bg-white/15 px-2 py-1 text-[10px] font-black uppercase tracking-[0.2em]">New</span>
+            </div>
+            <div class="mt-6 space-y-5">
+                {% for review in recent_reviews %}
+                    <div class="rounded-2xl bg-white/10 p-4">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">{{ review.submission.chapter.name|default:'Submission' }}</p>
+                        <p class="mt-1 font-semibold">{{ review.submission.project.title }}</p>
+                        <p class="mt-1 text-xs text-white/70">{{ review.created_at|date:'M d, Y H:i' }}</p>
                     </div>
+                {% empty %}
+                    <p class="text-sm text-white/70">No reviews submitted yet.</p>
+                {% endfor %}
+            </div>
+            <a href="{% url 'notifications:list' %}" class="mt-6 inline-flex w-full items-center justify-center rounded-2xl border border-white/20 px-4 py-3 text-sm font-bold text-white hover:bg-white/10">View All Notifications</a>
+        </div>
+    </section>
 
-                    <span class="px-3 py-1 rounded-full text-xs font-bold {% if submission.status == 'APPROVED' %}bg-emerald-500/15 text-emerald-300 border border-emerald-600/40{% elif submission.status == 'REJECTED' %}bg-rose-500/15 text-rose-300 border border-rose-600/40{% else %}bg-amber-500/15 text-amber-300 border border-amber-600/40{% endif %}">
-                        {{ submission.get_status_display }}
-                    </span>
+    <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-950">Pending Proposals</h2>
+                    <p class="mt-1 text-sm text-slate-500">Review queue for thesis proposals.</p>
                 </div>
+                <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">Action Required</span>
+            </div>
+            <div class="mt-6 space-y-4">
+                {% for submission in recent_submission_decisions %}
+                    <article class="rounded-2xl bg-slate-50 p-4 ring-1 ring-black/5">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-950">{{ submission.project.title }}</p>
+                                <p class="mt-1 text-xs text-slate-500">{{ submission.chapter.name|default:'Unknown Chapter' }} · Version {{ submission.version }}</p>
+                            </div>
+                            <span class="rounded-full px-3 py-1 text-xs font-bold {% if submission.status == 'APPROVED' %}bg-emerald-100 text-emerald-700{% elif submission.status == 'REJECTED' %}bg-rose-100 text-rose-700{% else %}bg-amber-100 text-amber-700{% endif %}">
+                                {{ submission.get_status_display }}
+                            </span>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p class="text-sm text-slate-500">No submissions found for the selected filter.</p>
+                {% endfor %}
+            </div>
+        </div>
 
-                <div class="mt-3 border-t border-slate-800 pt-3">
-                    <p class="text-xs uppercase tracking-widest text-slate-500">Feedback Preview</p>
-                    <p class="mt-1 text-sm text-slate-300">{{ submission.feedback_preview|default:'No feedback yet.'|truncatechars:140 }}</p>
-                    <a href="{% url 'projects:supervisor-project-detail' submission.project_id %}" class="inline-block mt-2 text-indigo-400 hover:text-white text-sm font-semibold">
-                        View Feedback Details
-                    </a>
-                </div>
-            </article>
+        <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+            <h2 class="text-xl font-bold text-slate-950">Supervision Log</h2>
+            <p class="mt-1 text-sm text-slate-500">Mandatory bi-weekly consultation tracking.</p>
+            <div class="mt-6 space-y-4 text-sm">
+                {% for review in recent_reviews %}
+                    <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-black/5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{{ review.submission.project.title }}</p>
+                        <p class="mt-2 text-slate-700">{{ review.comment|truncatechars:120 }}</p>
+                    </div>
+                {% empty %}
+                    <p class="text-sm text-slate-500">No supervision notes yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
+        <div class="flex items-center justify-between gap-3">
+            <div>
+                <h2 class="text-xl font-bold text-slate-950">Upcoming Deadlines</h2>
+                <p class="mt-1 text-sm text-slate-500">Title, chapter, review, and defense milestones for your active projects.</p>
+            </div>
+            <a href="{% url 'dashboard:deadlines-calendar' %}" class="text-sm font-bold text-[#800000] hover:underline">Open calendar</a>
+        </div>
+        <div class="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {% for deadline in upcoming_deadlines %}
+                <article class="rounded-2xl bg-slate-50 p-4 ring-1 ring-black/5">
+                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{{ deadline.get_deadline_type_display }}</p>
+                    <p class="mt-2 text-sm font-semibold text-slate-950">{{ deadline.title }}</p>
+                    <p class="mt-1 text-xs text-slate-500">{{ deadline.due_date|date:'M d, Y' }}</p>
+                </article>
             {% empty %}
-            <p class="text-slate-500">No submissions found for the selected filter.</p>
+                <p class="text-sm text-slate-500">No deadlines scheduled yet.</p>
             {% endfor %}
         </div>
     </section>

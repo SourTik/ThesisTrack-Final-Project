@@ -1,38 +1,24 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="space-y-8">
-    <div class="flex justify-between items-center">
+<div class="mx-auto max-w-7xl space-y-8">
+    <section class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-white">Assigned Projects</h1>
-            <p class="text-slate-400 mt-1">Projects you are responsible for supervising.</p>
+            <p class="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#800000]">Workspace / Active Research</p>
+            <h1 class="text-5xl font-black tracking-tight text-slate-950">Supervisor Project Hub</h1>
+            <p class="mt-3 max-w-2xl text-base leading-7 text-slate-600">Projects you are responsible for supervising.</p>
         </div>
-        <a href="{% url 'dashboard:supervisor-dashboard' %}" class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-3 rounded-xl font-bold border border-slate-700">
-            Supervisor Dashboard
-        </a>
-    </div>
+        <a href="{% url 'dashboard:supervisor-dashboard' %}" class="rounded-xl bg-[#800000] px-5 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(128,0,0,0.2)]">Supervisor Dashboard</a>
+    </section>
 
-    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <section class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {% for row in project_rows %}
-        <div class="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <p class="text-xs uppercase tracking-widest text-indigo-400">{{ row.project.get_status_display }}</p>
-            <h2 class="mt-2 text-xl font-bold text-white">{{ row.project.title }}</h2>
-            <p class="mt-2 text-sm text-slate-400">Group: {% if row.project.group %}{{ row.project.group.name }}{% else %}Not assigned{% endif %}</p>
-            <p class="mt-1 text-sm text-slate-400">Submitted chapters: {{ row.submitted_chapters }}</p>
-            <p class="mt-1 text-sm text-slate-400">Pending reviews: {{ row.pending_reviews }}</p>
-            <p class="mt-1 text-sm text-slate-300 font-semibold">Progress: {{ row.current_progress }}</p>
-
-            <div class="mt-6 pt-5 border-t border-slate-800">
-                <a href="{% url 'projects:supervisor-project-detail' row.project.id %}" class="text-indigo-400 hover:text-white font-bold">
-                    Open Project Details
-                </a>
-            </div>
-        </div>
+            {% with project=row.project %}
+                {% include 'projects/_project_card.html' with project=project %}
+            {% endwith %}
         {% empty %}
-        <div class="col-span-full rounded-3xl border border-dashed border-slate-800 p-10 text-center text-slate-500">
-            No assigned projects yet.
-        </div>
+            <div class="col-span-full rounded-3xl border border-dashed border-black/10 bg-white p-12 text-center text-slate-500 shadow-sm">No assigned projects yet.</div>
         {% endfor %}
-    </div>
+    </section>
 </div>
 {% endblock %}

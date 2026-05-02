@@ -1,0 +1,82 @@
+{% comment %} Shared sidebar partial for ThesisTrack UI refresh {% endcomment %}
+<aside class="fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-black/5 bg-[#f3f1ed] px-4 py-6 shadow-[0_12px_40px_rgba(26,28,28,0.04)]">
+    {% with current_url_name=request.resolver_match.url_name|default:'' %}
+    <div class="mb-8 px-2">
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#800000] text-white shadow-sm">
+                <i class="fa-solid fa-graduation-cap text-sm"></i>
+            </div>
+            <div>
+                <h1 class="text-sm font-black leading-none text-[#800000]">ThesisTrack</h1>
+                <p class="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-500">The Academic Curator</p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="flex-1 space-y-1">
+        <a href="{% url 'dashboard:home' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 font-semibold {% if current_url_name == 'home' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+            <i class="fa-solid fa-border-all text-sm"></i>
+            <span class="text-sm">Dashboard</span>
+        </a>
+
+        {% if user.role == 'SUPERVISOR' %}
+            <a href="{% url 'projects:supervisor-project-list' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'supervisor-project-list' or current_url_name == 'supervisor-project-detail' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+                <i class="fa-regular fa-folder-open text-sm"></i>
+                <span class="text-sm">Assigned Projects</span>
+            </a>
+            <a href="{% url 'attendance:supervisor_attendance_dashboard' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'supervisor_attendance_dashboard' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+                <i class="fa-regular fa-calendar-check text-sm"></i>
+                <span class="text-sm">Attendance</span>
+            </a>
+        {% elif user.role == 'ADMIN' or user.is_superuser %}
+            <a href="{% url 'projects:project-list' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'project-list' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+                <i class="fa-regular fa-folder-open text-sm"></i>
+                <span class="text-sm">Projects</span>
+            </a>
+            <a href="{% url 'attendance:admin_attendance_dashboard' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'admin_attendance_dashboard' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+                <i class="fa-regular fa-calendar-check text-sm"></i>
+                <span class="text-sm">Attendance</span>
+            </a>
+        {% else %}
+            <a href="{% url 'projects:project-list' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'project-list' or current_url_name == 'submit-project' or current_url_name == 'submit-document' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+                <i class="fa-regular fa-folder-open text-sm"></i>
+                <span class="text-sm">Submissions</span>
+            </a>
+            <a href="{% url 'attendance:student_attendance_dashboard' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'student_attendance_dashboard' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+                <i class="fa-regular fa-calendar-check text-sm"></i>
+                <span class="text-sm">Attendance</span>
+            </a>
+        {% endif %}
+
+        <a href="{% url 'notifications:list' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'list' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+            <i class="fa-regular fa-bell text-sm"></i>
+            <span class="text-sm">Notifications</span>
+        </a>
+
+        <a href="{% url 'dashboard:deadlines-calendar' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'deadlines-calendar' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+            <i class="fa-regular fa-calendar-days text-sm"></i>
+            <span class="text-sm">Deadlines</span>
+        </a>
+
+        {% if user.role == 'ADMIN' or user.is_superuser %}
+            <a href="{% url 'dashboard:admin-reports-home' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'admin-reports-home' or 'admin-report' in current_url_name %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+                <i class="fa-solid fa-chart-line text-sm"></i>
+                <span class="text-sm">Reports</span>
+            </a>
+            <a href="{% url 'accounts:create-user' %}" class="nav-link flex items-center gap-3 rounded-xl px-4 py-3 {% if current_url_name == 'create-user' %}bg-white text-[#800000] shadow-sm{% else %}text-slate-500 hover:bg-white hover:text-[#800000]{% endif %}">
+                <i class="fa-solid fa-user-plus text-sm"></i>
+                <span class="text-sm">Create User</span>
+            </a>
+        {% endif %}
+    </nav>
+
+    <div class="mt-auto space-y-4 pt-4">
+        <form action="{% url 'accounts:logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="w-full rounded-xl bg-[#800000] px-4 py-3 text-sm font-bold text-white shadow-[0_10px_20px_rgba(128,0,0,0.18)] transition-transform hover:-translate-y-0.5">
+                Logout
+            </button>
+        </form>
+    </div>
+    {% endwith %}
+</aside>
